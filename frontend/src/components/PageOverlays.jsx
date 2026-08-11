@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import UnderConstruction from './UnderConstruction';
+import AdminPanel from './AdminPanel';
 
 export default function PageOverlays({ activePage, onClose, onNavigate }) {
   const pageRefs = useRef({});
@@ -291,6 +292,16 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* SECRET ADMIN PAGE */}
+      <div
+        className={`page ${activePage === 'page-admin' ? 'open' : ''}`}
+        id="page-admin"
+        ref={setPageRef('page-admin')}
+      >
+        <div className="page-bg">{activePage === 'page-admin' && renderBgMedia('yanf-wall.svg')}</div>
+        <AdminPanel onNavigate={onNavigate} />
       </div>
 
       {/* CERTIFICATES PAGE (UNDER CONSTRUCTION) */}
