@@ -46,6 +46,10 @@ export default function Navbar({ onNavigate, onOpenMobileMenu }) {
           </button>
           <div className="dropdown">
             <a href="#page-resources" onClick={(e) => handleLinkClick(e, 'page-resources')}>Resources</a>
+            <a href="#page-certificates" onClick={(e) => handleLinkClick(e, 'page-certificates')}>Certificates</a>
+            <a href="#page-blogs" onClick={(e) => handleLinkClick(e, 'page-blogs')}>Blogs</a>
+            <a href="#page-hall-of-fame" onClick={(e) => handleLinkClick(e, 'page-hall-of-fame')}>Hall of Fame</a>
+            <a href="#page-gallery" onClick={(e) => handleLinkClick(e, 'page-gallery')}>Gallery</a>
             <a href="#page-contact" onClick={(e) => handleLinkClick(e, 'page-contact')}>Contact</a>
           </div>
         </div>

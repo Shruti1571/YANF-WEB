@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import UnderConstruction from './UnderConstruction';
 
 export default function PageOverlays({ activePage, onClose, onNavigate }) {
   const pageRefs = useRef({});
@@ -290,6 +291,102 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* CERTIFICATES PAGE (UNDER CONSTRUCTION) */}
+      <div
+        className={`page ${activePage === 'page-certificates' ? 'open' : ''}`}
+        id="page-certificates"
+        ref={setPageRef('page-certificates')}
+      >
+        <button className="back" type="button" onClick={onClose}>✕ Close</button>
+        {activePage === 'page-certificates' && (
+          <UnderConstruction
+            kicker="More · Certificates"
+            title="Digital Credential & Certificate Verifier"
+            badge="Under Construction • Launching Soon"
+            description="Our tamper-proof digital certification portal is currently undergoing final verification and testing. Delegates, schools, and adjudicators will soon be able to instantly verify and download official YANF certificates of achievement and participation."
+            bgMedia="yanf-wall.svg"
+            onNavigate={onNavigate}
+            features={[
+              { tag: "VERIFICATION 01", heading: "Instant ID Verification", text: "Verify delegate credentials and awards using unique Certificate Hash IDs." },
+              { tag: "VERIFICATION 02", heading: "High-Res PDF Download", text: "Download official signed certificates suitable for university applications." },
+              { tag: "VERIFICATION 03", heading: "LinkedIn Credential Badges", text: "Directly export verified credentials to LinkedIn profiles." }
+            ]}
+          />
+        )}
+      </div>
+
+      {/* BLOGS PAGE (UNDER CONSTRUCTION) */}
+      <div
+        className={`page ${activePage === 'page-blogs' ? 'open' : ''}`}
+        id="page-blogs"
+        ref={setPageRef('page-blogs')}
+      >
+        <button className="back" type="button" onClick={onClose}>✕ Close</button>
+        {activePage === 'page-blogs' && (
+          <UnderConstruction
+            kicker="More · Editorial & Blogs"
+            title="The YANF Diplomatic Journal & Blog Feed"
+            badge="Under Construction • Launching Soon"
+            description="We are preparing our live publication hub where YANF mentors, guest diplomats, and delegate writers publish long-form geopolitical analysis, MUN briefing packs, policy commentary, and debate strategy."
+            bgMedia="yanf-wall.svg"
+            onNavigate={onNavigate}
+            features={[
+              { tag: "EDITORIAL 01", heading: "Geopolitical Briefings", text: "Weekly deep dives into active conflict zones, sanctions, and economic alliances." },
+              { tag: "EDITORIAL 02", heading: "Debate Masterclasses", text: "Tactical guides on AP/BP motions, POI strategies, and resolution drafting." },
+              { tag: "EDITORIAL 03", heading: "Delegate Spotlights", text: "Featured research papers and position pieces written by outstanding delegates." }
+            ]}
+          />
+        )}
+      </div>
+
+      {/* HALL OF FAME PAGE (UNDER CONSTRUCTION) */}
+      <div
+        className={`page ${activePage === 'page-hall-of-fame' ? 'open' : ''}`}
+        id="page-hall-of-fame"
+        ref={setPageRef('page-hall-of-fame')}
+      >
+        <button className="back" type="button" onClick={onClose}>✕ Close</button>
+        {activePage === 'page-hall-of-fame' && (
+          <UnderConstruction
+            kicker="More · Hall of Fame"
+            title="YANF Delegate Hall of Fame"
+            badge="Under Construction • Launching Soon"
+            description="A digital monument celebrating our most distinguished delegates, best parliamentarians, top pitchers, and alumni who have represented YANF at national and international forums across the world."
+            bgMedia="yanf-wall.svg"
+            onNavigate={onNavigate}
+            features={[
+              { tag: "SPOTLIGHT 01", heading: "Best Delegate Honor Roll", text: "Annual showcase of top award winners from Security Council & General Assembly simulations." },
+              { tag: "SPOTLIGHT 02", heading: "Parliamentary Champions", text: "Recognising victorious teams and best speakers in Asian & British Parliamentary formats." },
+              { tag: "SPOTLIGHT 03", heading: "Alumni Trajectories", text: "Tracking YANF alumni making impact in international law, civil services, and policy." }
+            ]}
+          />
+        )}
+      </div>
+
+      {/* GALLERY PAGE (UNDER CONSTRUCTION) */}
+      <div
+        className={`page ${activePage === 'page-gallery' ? 'open' : ''}`}
+        id="page-gallery"
+        ref={setPageRef('page-gallery')}
+      >
+        <button className="back" type="button" onClick={onClose}>✕ Close</button>
+        {activePage === 'page-gallery' && (
+          <UnderConstruction
+            kicker="More · Media Gallery"
+            title="YANF Moments & Event Gallery"
+            badge="Under Construction • Launching Soon"
+            description="Our high-resolution media gallery is being curated. Soon you will be able to browse photo archives, committee highlights, keynotes, and press briefings from past assemblies."
+            bgMedia="yanf-wall.svg"
+            onNavigate={onNavigate}
+            features={[
+              { tag: "GALLERY 01", heading: "Committee Photos", text: "Hi-res photography of debate sessions, unmoderated caucuses, and voting procedures." },
+              { tag: "GALLERY 02", heading: "Closing Ceremonies", text: "Award announcements, gavel drops, and delegation group portraits." },
+              { tag: "GALLERY 03", heading: "Behind the Scenes", text: "Mentorship sessions, briefing prep, and social night moments." }
+            ]}
+          />
+        )}
       </div>
 
       {/* CONTACT PAGE */}
