@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 893" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <!-- soft wall lighting: brighter upper-centre, falling off to the corners -->
+    <radialGradient id="wall" cx="50%" cy="42%" r="72%">
+      <stop offset="0%"  stop-color="#e5e3de"/>
+      <stop offset="55%" stop-color="#dad8d2"/>
+      <stop offset="100%" stop-color="#c3c1bb"/>
+    </radialGradient>
+    <!-- subtle raised-letter shadow, cast down and to the right -->
+    <filter id="raise" x="-8%" y="-8%" width="116%" height="126%">
+      <feDropShadow dx="3" dy="9" stdDeviation="9" flood-color="#000000" flood-opacity="0.30"/>
+    </filter>
+    <!-- faint paper/plaster grain -->
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.05 0"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="893" fill="url(#wall)"/>
+  <rect width="1600" height="893" filter="url(#grain)"/>
+
+  <text x="800" y="490"
+        font-family="'Space Grotesk','Helvetica Neue',Arial,sans-serif"
+        font-weight="700" font-size="300" letter-spacing="14"
+        text-anchor="middle" fill="#3b3b39" filter="url(#raise)">YANF</text>
+</svg>
