@@ -377,3 +377,10 @@ blockquote em { font-style: normal; color: var(--gold); }
   section.scene.short { min-height: 115dvh; }
   section.scene.finale { min-height: 200dvh; }
 }
+
+/* Touch devices: don't promote every video layer to its own GPU layer.
+   Keeping ~19 composited video layers alive at once exhausts phone
+   memory and freezes the decoder — the usual cause of a stuck clip. */
+@media (hover: none), (pointer: coarse) {
+  #stack video, #stack .split { will-change: auto; }
+}

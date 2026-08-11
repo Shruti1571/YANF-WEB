@@ -33,6 +33,12 @@ function watchVideo(v, filename) {
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if (prefersReducedMotion) document.body.classList.add('no-motion');
 
+/* Touch / phone detection: on these devices we lighten the video engine
+   — no zoom transform, fewer videos preloaded, and stall recovery — so
+   clips stay sharp and don't freeze under memory / bandwidth pressure. */
+const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+if (isTouch) document.body.classList.add('is-touch');
+
 /* =================================================================
    SCENES — one entry per video, in narrative order.
 ================================================================= */
@@ -152,9 +158,15 @@ function makeVideo(srcName) {
   const v = document.createElement('video');
   v.muted = true; v.loop = true; v.playsInline = true;
   v.setAttribute('playsinline', ''); v.setAttribute('muted', '');
+  v.setAttribute('webkit-playsinline', ''); // older iOS
+  v.setAttribute('disablepictureinpicture', '');
   v.preload = 'none';
   v.dataset.src = resolveSrc(srcName);
   watchVideo(v, resolveSrc(srcName));
+  // stall recovery: if the active clip buffers or gets interrupted, nudge
+  // it back into playback instead of leaving a frozen frame
+  ['canplay', 'waiting', 'stalled', 'suspend'].forEach(evt =>
+    v.addEventListener(evt, () => { if (v._wantPlay && v.paused) safePlay(v); }));
   return v;
 }
 
@@ -213,8 +225,8 @@ function ensureLoaded(i) {
   layers[i]._vids.forEach(v => { if (!v.src) { v.src = v.dataset.src; v.load(); } });
 }
 function safePlay(v) { const p = v.play(); if (p) p.catch(() => {}); }
-function playLayer(el) { el._vids.forEach(safePlay); }
-function pauseLayer(el) { el._vids.forEach(v => v.pause()); }
+function playLayer(el) { el._vids.forEach(v => { v._wantPlay = true; safePlay(v); }); }
+function pauseLayer(el) { el._vids.forEach(v => { v._wantPlay = false; v.pause(); }); }
 
 let current = -1;
 let kenBurns = null;
@@ -223,15 +235,20 @@ function activate(i) {
   if (i === current) return;
   current = i;
 
-  // lazy-load current + neighbours so scrolling ahead is seamless
-  ensureLoaded(i - 1); ensureLoaded(i); ensureLoaded(i + 1); ensureLoaded(i + 2);
+  // lazy-load current + neighbours so scrolling ahead is seamless.
+  // On phones, load only current + next so the active clip isn't starved
+  // of bandwidth / decoders (a common cause of stuck playback).
+  ensureLoaded(i); ensureLoaded(i + 1);
+  if (!isTouch) { ensureLoaded(i - 1); ensureLoaded(i + 2); }
 
   layers.forEach((v, j) => {
     if (j === i) {
       v.style.zIndex = 2;
       playLayer(v);
       gsap.to(v, { opacity: 1, duration: 1.4, ease: 'power2.inOut' });
-      if (!prefersReducedMotion) {
+      // Ken Burns zoom is desktop-only: on phones the scale transform
+      // upscales the frame (soft/blurry) and overloads the GPU (stutter).
+      if (!prefersReducedMotion && !isTouch) {
         if (kenBurns) kenBurns.kill();
         kenBurns = gsap.fromTo(v, { scale: 1.0 }, { scale: 1.07, duration: 14, ease: 'none' });
       }
@@ -299,6 +316,12 @@ else {
   first.addEventListener('canplay', boot, { once: true });
   setTimeout(boot, 3500); // never trap the user on the loader
 }
+
+// Some mobile browsers block muted autoplay until the first interaction —
+// the initial touch/scroll kicks the active clip into playing.
+['touchstart', 'pointerdown', 'scroll'].forEach(evt =>
+  window.addEventListener(evt, () => { if (current >= 0) playLayer(layers[current]); },
+    { once: true, passive: true }));
 
 /* =================================================================
    PAGES — hash-routed overlays for About / Events / More
