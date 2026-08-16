@@ -198,7 +198,52 @@ blockquote em { font-style: normal; color: var(--gold); }
   100% { transform: scaleY(0); transform-origin: bottom; }
 }
 
-/* ============ PAGES ============ */
+/* ============ NAVBAR ============ */
+nav#topnav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  height: var(--nav-h);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 5vw;
+  background: linear-gradient(180deg, rgba(6,13,20,0.72), rgba(6,13,20,0.28) 70%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.brand { display: flex; align-items: baseline; gap: 12px; cursor: pointer; text-decoration: none; color: var(--ink); }
+.brand b { font-weight: 600; letter-spacing: 0.28em; font-size: 17px; }
+.brand span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; color: var(--ink-dim); }
+
+.nav-links { display: flex; align-items: center; gap: 34px; }
+.nav-item { position: relative; }
+.nav-item > a, .nav-item > button {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink); text-decoration: none; background: none; border: none; cursor: pointer;
+  padding: 10px 14px; border-radius: 8px; display: inline-flex; align-items: center; gap: 7px;
+  transition: all 0.25s ease;
+}
+.nav-item > a:hover, .nav-item > button:hover, .nav-item.open > button {
+  color: var(--ice);
+}
+.nav-item .caret { font-size: 9px; transform: translateY(-1px); opacity: 0.7; }
+
+.dropdown {
+  position: absolute; top: calc(100% + 4px); left: 50%; transform: translateX(-50%) translateY(6px);
+  min-width: 230px;
+  background: rgba(8, 17, 26, 0.94);
+  border: 1px solid var(--line);
+  padding: 8px 0;
+  opacity: 0; visibility: hidden; transition: all 0.25s ease;
+}
+.nav-item:hover .dropdown, .nav-item.open .dropdown {
+  opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0);
+}
+.dropdown a {
+  display: block; padding: 11px 20px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-dim); text-decoration: none;
+}
+.dropdown a:hover { color: var(--ice); background: rgba(143, 208, 255, 0.06); }
+
+/* ============ PAGES (About / Events / More) ============ */
 .page {
   position: fixed; inset: 0; z-index: 70; background: var(--bg);
   display: none; overflow-y: auto;
@@ -217,6 +262,62 @@ blockquote em { font-style: normal; color: var(--gold); }
   padding: 11px 18px; cursor: pointer; transition: all 0.3s;
 }
 .page .back:hover { border-color: var(--ice); color: var(--ice); }
+
+.page .kicker { margin-bottom: 18px; }
+.page h1 { font-size: clamp(2.3rem, 5.4vw, 4.4rem); font-weight: 500; line-height: 1.1; letter-spacing: -0.015em; max-width: 16ch; }
+.page .lede { margin-top: 26px; max-width: 58ch; font-weight: 300; line-height: 1.8; color: var(--ink-dim); font-size: clamp(1rem, 1.4vw, 1.15rem); }
+
+.info-grid { margin-top: 60px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.info-grid .cell { background: rgba(6,13,20,0.85); padding: 30px 26px; }
+.cell h3 { font-family: var(--mono); font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ice); margin-bottom: 14px; }
+.cell p, .cell li { font-weight: 300; font-size: 0.95rem; line-height: 1.7; color: var(--ink-dim); }
+.cell a { color: var(--ice); text-decoration: none; border-bottom: 1px solid rgba(143, 208, 255, 0.35); transition: color 0.25s, border-color 0.25s; }
+.cell a:hover { color: var(--ink); border-color: var(--ink); }
+.cell ul { list-style: none; }
+.cell li { padding: 5px 0; border-bottom: 1px solid rgba(238,244,248,0.06); }
+.cell li:last-child { border-bottom: none; }
+
+.page .cta-row { justify-content: flex-start; }
+
+/* Event page components */
+.event-tag { margin-top: 16px; font-family: var(--mono); font-size: 12px;
+  letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); }
+.sec-title { margin: 64px 0 24px; font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.34em; text-transform: uppercase; color: var(--ice);
+  display: flex; align-items: center; gap: 16px; }
+.sec-title::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.page .body-text { max-width: 66ch; font-weight: 300; line-height: 1.85;
+  color: var(--ink-dim); font-size: 0.98rem; }
+.page .body-text + .body-text { margin-top: 14px; }
+.bullets { list-style: none; max-width: 660px; }
+.bullets li { padding: 11px 0 11px 28px; position: relative;
+  border-bottom: 1px solid rgba(238,244,248,0.07);
+  font-weight: 300; line-height: 1.6; color: var(--ink-dim); font-size: 0.95rem; }
+.bullets li:last-child { border-bottom: none; }
+.bullets li::before { content: "—"; position: absolute; left: 0; color: var(--ice); }
+.bullets b { color: var(--ink); font-weight: 500; }
+.hl-table { width: 100%; max-width: 760px; border-collapse: collapse; border: 1px solid var(--line); }
+.hl-table th, .hl-table td { padding: 15px 20px; text-align: left;
+  border-bottom: 1px solid var(--line); vertical-align: top; }
+.hl-table tr:last-child th, .hl-table tr:last-child td { border-bottom: none; }
+.hl-table th { font-family: var(--mono); font-size: 10px; letter-spacing: 0.28em;
+  text-transform: uppercase; color: var(--ice); width: 190px; font-weight: 500;
+  background: rgba(143, 208, 255, 0.04); }
+.hl-table td { color: var(--ink-dim); font-weight: 300; font-size: 0.94rem; line-height: 1.6; }
+.links-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.links-grid a { display: block; background: rgba(6,13,20,0.85); padding: 26px 24px;
+  text-decoration: none; transition: background 0.3s; }
+.links-grid a:hover { background: rgba(143, 208, 255, 0.07); }
+.links-grid b { display: block; font-weight: 500; color: var(--ink); font-size: 1.02rem; margin-bottom: 7px; }
+.links-grid p { font-weight: 300; font-size: 0.85rem; color: var(--ink-dim); line-height: 1.55; margin-bottom: 14px; }
+.links-grid span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--ice); }
+.cta-band { margin-top: 64px; padding: 34px 32px; border: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 22px; }
+.cta-band h4 { font-weight: 400; font-size: 1.15rem; line-height: 1.5; max-width: 44ch; }
+.tagline-foot { margin-top: 72px; font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.32em; text-transform: uppercase; color: var(--ink-dim); }
 
 /* ============ LIQUID GLASS & PILL AUTH DESIGN SYSTEM ============ */
 .admin-terminal-layout {

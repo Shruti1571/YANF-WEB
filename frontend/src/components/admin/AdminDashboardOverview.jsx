@@ -115,7 +115,7 @@ export default function AdminDashboardOverview({ publishedBlogs, setActiveTab })
           {/* Quick Draft */}
           <div className="studio-card">
             <h3 style={{ fontSize: '15px', fontWeight: '600', margin: '0 0 16px 0', color: '#1a1a1a' }}>Quick Draft</h3>
-            <form onSubmit={(e) => { e.preventDefault(); alert("Draft saved!"); }}>
+            <form onSubmit={(e) => { e.preventDefault(); const b = e.target.querySelector('button'); if(b){ b.textContent = 'Draft Saved! ✓'; b.style.background = '#16a34a'; setTimeout(() => { b.textContent = 'Save Draft'; b.style.background = '#2563eb'; }, 2000); } }}>
               <input type="text" className="studio-input" placeholder="Title" style={{ marginBottom: '12px' }} />
               <textarea className="studio-textarea" rows="4" placeholder="What's on your mind?" style={{ marginBottom: '16px' }}></textarea>
               <button type="submit" className="btn-primary" style={{ width: '100%' }}>Save Draft</button>

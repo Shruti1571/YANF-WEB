@@ -80,7 +80,7 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
         </div>
       </div>
 
-      {/* MUN PAGE */}
+      {/* MODEL UNITED NATIONS PAGE */}
       <div
         className={`page ${activePage === 'page-mun' ? 'open' : ''}`}
         id="page-mun"
@@ -92,7 +92,7 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
           <div className="kicker">Events · 01</div>
           <h1>Model United Nations</h1>
           <div className="event-tag">Simulate · Debate · Resolve</div>
-          <p className="lede">Step into the shoes of the world's diplomats. Model United Nations (MUN) is a globally recognised academic simulation of the United Nations where students represent countries, debate pressing international issues, and draft resolutions — just as real UN delegates do.</p>
+          <p className="lede">Step into the shoes of the world's diplomats. Model United Nations (MUN) is a globally recognised academic simulation of the United Nations where students represent countries, debate pressing international issues, and draft resolutions — just as real UN delegates do. It is one of the most powerful platforms for developing leadership, diplomacy, public speaking, and critical thinking in young minds.</p>
           <p className="body-text" style={{ marginTop: '16px' }}>At YANF, MUN is not just an event — it is a transformative experience that challenges students to step beyond the classroom and engage with the world as it truly is.</p>
 
           <div className="sec-title">Why participate in MUN</div>
@@ -104,6 +104,9 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
             <li>Earn recognition through awards like Best Delegate &amp; Verbal Mention</li>
           </ul>
 
+          <div className="sec-title">How MUN works</div>
+          <p className="body-text">Each delegate is assigned a country and a committee. They research their country's position on the agenda topic, prepare a position paper, and participate in structured debate sessions guided by the Rules of Procedure (RoP). The debate leads to the drafting and passing of a resolution — a formal document that proposes solutions to the issue at hand.</p>
+
           <div className="sec-title">Committees at YANF MUN</div>
           <div className="info-grid">
             <div className="cell"><h3>UNSC</h3><p>UN Security Council — addressing threats to international peace and security.</p></div>
@@ -113,6 +116,15 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
             <div className="cell"><h3>ECOSOC</h3><p>Economic and Social Council — development, trade, and social progress.</p></div>
             <div className="cell"><h3>Crisis Committee</h3><p>Fast-paced simulation responding to real-time international crises.</p></div>
           </div>
+
+          <div className="sec-title">What students gain</div>
+          <ul className="bullets">
+            <li>A sharper, more diplomatic way of thinking</li>
+            <li>Confidence to speak in front of large audiences</li>
+            <li>The ability to write structured, policy-level documents</li>
+            <li>An international perspective on global challenges</li>
+            <li>Lifelong skills in negotiation and strategic communication</li>
+          </ul>
 
           <div className="sec-title">Event highlights</div>
           <table className="hl-table">
@@ -128,6 +140,17 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
           <div className="cta-band">
             <h4>Ready to represent your nation? Register for YANF MUN today.</h4>
             <a className="btn solid" href="#page-contact" onClick={(e) => handleLink(e, 'page-contact')}>Register interest</a>
+          </div>
+
+          <div className="sec-title">Explore the real United Nations</div>
+          <p className="body-text" style={{ marginBottom: '26px' }}>Before your committee session, explore the official websites of the UN bodies you will be simulating. Understanding how these organisations actually work will give you a powerful edge in debate.</p>
+          <div className="links-grid">
+            <a href="https://www.un.org/securitycouncil" target="_blank" rel="noopener noreferrer"><b>UNSC</b><p>UN Security Council — Peace &amp; Security</p><span>Visit website →</span></a>
+            <a href="https://www.ohchr.org/en/hr-bodies/hrc/home" target="_blank" rel="noopener noreferrer"><b>UNHRC</b><p>UN Human Rights Council</p><span>Visit website →</span></a>
+            <a href="https://www.who.int" target="_blank" rel="noopener noreferrer"><b>WHO</b><p>World Health Organization</p><span>Visit website →</span></a>
+            <a href="https://www.un.org/en/ga" target="_blank" rel="noopener noreferrer"><b>UNGA</b><p>UN General Assembly</p><span>Visit website →</span></a>
+            <a href="https://ecosoc.un.org" target="_blank" rel="noopener noreferrer"><b>ECOSOC</b><p>Economic &amp; Social Council</p><span>Visit website →</span></a>
+            <a href="https://www.un.org" target="_blank" rel="noopener noreferrer"><b>UN Main Site</b><p>United Nations Official Website</p><span>Visit website →</span></a>
           </div>
 
           <div className="cta-row" style={{ marginTop: '56px' }}>
@@ -149,19 +172,50 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
           <div className="kicker">Events · 02</div>
           <h1>Parliamentary Debates</h1>
           <div className="event-tag">Argue · Rebut · Persuade</div>
-          <p className="lede">Where the right argument, delivered at the right moment, wins. Parliamentary Debate at YANF is a structured battlefield of ideas, logic, and rhetoric where young minds learn to argue with precision and defend their stance with conviction.</p>
+          <p className="lede">Where the right argument, delivered at the right moment, wins. Parliamentary Debate at YANF is not just a debate — it is a structured battlefield of ideas, logic, and rhetoric where young minds learn to argue with precision, think on their feet, and defend their stance with conviction. Unlike general debates, Parliamentary Debate follows internationally recognised formats practiced in academic and professional circles across the globe.</p>
+
+          <div className="sec-title">Why Parliamentary Debate</div>
+          <ul className="bullets">
+            <li>Master the art of structured argumentation and rebuttal</li>
+            <li>Think critically and respond to opposing views in real time</li>
+            <li>Develop confident, persuasive, and articulate communication</li>
+            <li>Learn to construct logical, evidence-based arguments under pressure</li>
+            <li>Build the skills to speak effectively in any professional or academic setting</li>
+          </ul>
 
           <div className="sec-title">Formats we follow</div>
           <div className="info-grid">
             <div className="cell">
               <h3>Asian Parliamentary (AP)</h3>
-              <p>Two teams of three — Government (proposition) vs Opposition. Structured speeches, Points of Information (POIs) and summary reply speeches.</p>
+              <p>One of the most widely practiced formats across Asia: two teams of three — Government (proposition) vs Opposition. Each speaker delivers a structured speech, followed by Points of Information (POIs) and a reply speech that summarises the debate.</p>
+              <ul style={{ marginTop: '14px' }}>
+                <li>Teams: 2 (Government vs Opposition)</li>
+                <li>Speakers per team: 3 + 1 Reply Speaker</li>
+                <li>Speeches: 7 min constructive, 4 min reply</li>
+                <li>POIs: between the 1st and 6th minute</li>
+              </ul>
             </div>
             <div className="cell">
               <h3>British Parliamentary (BP)</h3>
-              <p>Four teams of two compete simultaneously — Opening Government, Opening Opposition, Closing Government, and Closing Opposition.</p>
+              <p>One of the most intellectually demanding formats in the world: four teams of two compete simultaneously — Opening Government, Opening Opposition, Closing Government, and Closing Opposition. Each team must advance its own case while answering all other teams.</p>
+              <ul style={{ marginTop: '14px' }}>
+                <li>Teams: 4 (two government, two opposition benches)</li>
+                <li>Speakers per team: 2</li>
+                <li>Speeches: 7 minutes each</li>
+                <li>POIs: between the 1st and 6th minute</li>
+                <li>Winner: ranked 1st to 4th by the adjudication panel</li>
+              </ul>
             </div>
           </div>
+
+          <div className="sec-title">What students gain</div>
+          <ul className="bullets">
+            <li>Ability to argue both sides of any issue with equal confidence</li>
+            <li>Improved listening and rapid response skills</li>
+            <li>Sharper logical thinking and analytical reasoning</li>
+            <li>Professional communication skills applicable to any career</li>
+            <li>The courage to speak, disagree, and persuade in any room</li>
+          </ul>
 
           <div className="sec-title">Event highlights</div>
           <table className="hl-table">
@@ -169,6 +223,7 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
               <tr><th>Duration</th><td>1 – 2 Days</td></tr>
               <tr><th>Suitable for</th><td>Grade 8 onwards</td></tr>
               <tr><th>Formats</th><td>Asian Parliamentary &amp; British Parliamentary</td></tr>
+              <tr><th>Team size</th><td>AP: 3 per team &nbsp;│&nbsp; BP: 2 per team</td></tr>
               <tr><th>Awards</th><td>Best Speaker, Best Team, Best Floor Speech</td></tr>
             </tbody>
           </table>
@@ -176,6 +231,14 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
           <div className="cta-band">
             <h4>Think you can win the floor? Register for YANF Parliamentary Debates.</h4>
             <a className="btn solid" href="#page-contact" onClick={(e) => handleLink(e, 'page-contact')}>Register interest</a>
+          </div>
+
+          <div className="sec-title">Explore debate resources</div>
+          <p className="body-text" style={{ marginBottom: '26px' }}>Sharpen your debate skills by exploring these globally recognised debate organisations and resources.</p>
+          <div className="links-grid">
+            <a href="https://www.wudc.info" target="_blank" rel="noopener noreferrer"><b>WUDC</b><p>World Universities Debating Championship</p><span>Visit website →</span></a>
+            <a href="https://bp-debate.com" target="_blank" rel="noopener noreferrer"><b>Worlds BP</b><p>British Parliamentary debating resources</p><span>Visit website →</span></a>
+            <a href="https://www.asianparliamentary.com" target="_blank" rel="noopener noreferrer"><b>Asian Debate</b><p>Asian Parliamentary debate resources</p><span>Visit website →</span></a>
           </div>
 
           <div className="cta-row" style={{ marginTop: '56px' }}>
@@ -197,21 +260,65 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
           <div className="kicker">Events · 03</div>
           <h1>Youth Parliament — युवा संसद</h1>
           <div className="event-tag">Simulate · Legislate · Lead</div>
-          <p className="lede">Experience Indian democracy from the inside. Youth Parliament — युवा संसद at YANF is a simulation of India's most prestigious constitutional and policy-making bodies.</p>
+          <p className="lede">Experience Indian democracy from the inside. Youth Parliament — युवा संसद at YANF is a powerful simulation of India's most prestigious constitutional and policy-making bodies. Students step into the roles of Members of Parliament, Chief Ministers, Opposition Leaders, Policy Makers, and Advisors — debating real legislative agendas and experiencing Indian democracy first-hand.</p>
+          <p className="body-text" style={{ marginTop: '16px' }}>More than a simulation, Yuva Sansad is a civics experience that builds informed, responsible, and constitutionally aware citizens — young Indians who don't just understand their democracy, but are prepared to participate in it, strengthen it, and lead it.</p>
+
+          <div className="sec-title">Why participate in Yuva Sansad</div>
+          <ul className="bullets">
+            <li>Understand how India's Parliament and policy institutions actually function</li>
+            <li>Build constitutional awareness and civic responsibility</li>
+            <li>Develop public speaking, argumentation, and legislative writing skills</li>
+            <li>Learn the language of policy, governance, and democratic debate</li>
+            <li>Become an aware, responsible citizen of India</li>
+          </ul>
+
+          <div className="sec-title">How it works</div>
+          <p className="body-text">Each participant is assigned a role — ruling party MP, opposition member, minister, or policy advisor — within a simulated house. They research real issues on the agenda, prepare speeches, raise questions, move amendments, and vote on bills. The session follows the actual procedural rules of the respective house, making it as authentic as possible.</p>
 
           <div className="sec-title">Houses &amp; committees simulated at YANF</div>
           <div className="info-grid">
             <div className="cell"><h3>Lok Sabha</h3><p>The lower house of India's Parliament — where bills are introduced and debated.</p></div>
             <div className="cell"><h3>Rajya Sabha</h3><p>The upper house — representing states and reviewing legislation.</p></div>
-            <div className="cell"><h3>Vidhan Sabha</h3><p>State Legislative Assembly — simulating state-level governance.</p></div>
-            <div className="cell"><h3>AIPPM</h3><p>All India Political Parties Meet — cross-party negotiation.</p></div>
+            <div className="cell"><h3>Vidhan Sabha</h3><p>State Legislative Assembly — simulating state-level governance and local policy.</p></div>
+            <div className="cell"><h3>AIPPM</h3><p>All India Political Parties Meet — cross-party negotiation on national issues.</p></div>
             <div className="cell"><h3>NITI Aayog</h3><p>India's premier policy think tank — crafting solutions for national development.</p></div>
-            <div className="cell"><h3>Press Conference</h3><p>Simulating media interactions, policy announcements, and press briefings.</p></div>
+            <div className="cell"><h3>Press Conference</h3><p>Students simulate media interactions, policy announcements, and press briefings.</p></div>
           </div>
+
+          <div className="sec-title">What students gain</div>
+          <ul className="bullets">
+            <li>A deep understanding of Indian constitutional structures</li>
+            <li>The confidence to speak, debate, and hold a position under pressure</li>
+            <li>Awareness of national issues — economic, social, and political</li>
+            <li>Experience in drafting bills, policy briefs, and formal resolutions</li>
+            <li>The mindset of a responsible, informed democratic citizen</li>
+          </ul>
+
+          <div className="sec-title">Event highlights</div>
+          <table className="hl-table">
+            <tbody>
+              <tr><th>Duration</th><td>2 – 3 Days</td></tr>
+              <tr><th>Suitable for</th><td>Grade 8 onwards</td></tr>
+              <tr><th>Houses</th><td>Lok Sabha, Rajya Sabha, Vidhan Sabha, AIPPM, NITI Aayog</td></tr>
+              <tr><th>Awards</th><td>Best Speaker, Best Minister, Best Opposition Leader, Best Policy Brief</td></tr>
+              <tr><th>Language</th><td>Hindi &amp; English</td></tr>
+            </tbody>
+          </table>
 
           <div className="cta-band">
             <h4>Step into Parliament. Your nation needs your voice. Register for Yuva Sansad.</h4>
             <a className="btn solid" href="#page-contact" onClick={(e) => handleLink(e, 'page-contact')}>Register interest</a>
+          </div>
+
+          <div className="sec-title">Explore India's constitutional bodies</div>
+          <p className="body-text" style={{ marginBottom: '26px' }}>Explore the official websites of the institutions you will be simulating. Understanding how these bodies actually work will make your participation sharper, more authentic, and more impactful.</p>
+          <div className="links-grid">
+            <a href="https://loksabha.nic.in" target="_blank" rel="noopener noreferrer"><b>Lok Sabha</b><p>House of the People — Lower House of Parliament</p><span>Visit website →</span></a>
+            <a href="https://rajyasabha.nic.in" target="_blank" rel="noopener noreferrer"><b>Rajya Sabha</b><p>Council of States — Upper House of Parliament</p><span>Visit website →</span></a>
+            <a href="https://www.niti.gov.in" target="_blank" rel="noopener noreferrer"><b>NITI Aayog</b><p>National Institution for Transforming India</p><span>Visit website →</span></a>
+            <a href="https://sansad.in" target="_blank" rel="noopener noreferrer"><b>Parliament of India</b><p>Official portal of the Indian Parliament</p><span>Visit website →</span></a>
+            <a href="https://legislative.gov.in" target="_blank" rel="noopener noreferrer"><b>Ministry of Law</b><p>Legislative Department of India</p><span>Visit website →</span></a>
+            <a href="https://www.india.gov.in/my-government/constitution-india" target="_blank" rel="noopener noreferrer"><b>Constitution of India</b><p>Read the full Indian Constitution</p><span>Visit website →</span></a>
           </div>
 
           <div className="cta-row" style={{ marginTop: '56px' }}>
@@ -233,17 +340,60 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
           <div className="kicker">Events · 04</div>
           <h1>Innovation Assembly</h1>
           <div className="event-tag">Pitch · Invest · Disrupt</div>
-          <p className="lede">Where students stop studying business — and start doing it. Every student has an idea. YANF's Innovation Assembly gives them the stage to prove it.</p>
+          <p className="lede">Where students stop studying business — and start doing it. Every student has an idea. YANF's Innovation Assembly gives them the stage to prove it. This one-of-a-kind simulation brings the world of entrepreneurship and investment straight to your school — where students pitch real ideas, challenge each other's thinking, and make bold decisions, just like founders and investors do in the real world.</p>
+          <p className="body-text" style={{ marginTop: '16px' }}>What makes it truly special is the dual experience. One student pitches their vision as an Innovator, while another weighs risks and opportunities as an Investor — and then they switch. By the end of it, every participant has lived both sides of the table. The summit crowns its own Best Entrepreneur and Best Investor, making the experience as exciting as it is educational.</p>
 
+          <div className="sec-title">Why Innovation Assembly</div>
+          <ul className="bullets">
+            <li>Experience both sides of the business table — as a founder and as an investor</li>
+            <li>Develop entrepreneurial thinking and creative problem-solving</li>
+            <li>Learn real business vocabulary — pitches, ROI, valuation, market sizing, term sheets</li>
+            <li>Build confidence to present, persuade, and defend ideas under scrutiny</li>
+            <li>Understand how investors evaluate risk, opportunity, and potential</li>
+          </ul>
+
+          <div className="sec-title">How it works</div>
           <div className="info-grid">
-            <div className="cell"><h3>Phase 1 — The Pitch</h3><p>Innovators develop and present business ideas to student Investors.</p></div>
-            <div className="cell"><h3>Phase 2 — Investment Round</h3><p>Investors evaluate pitches, ask probing questions, and allocate virtual capital.</p></div>
-            <div className="cell"><h3>Phase 3 — Summit Awards</h3><p>Crowns the Best Entrepreneur and Best Investor.</p></div>
+            <div className="cell"><h3>Phase 1 — The Innovation Pitch</h3><p>Students assigned as Innovators develop and present a business idea to a panel of student Investors — covering the problem, the solution, target audience, business model, and growth plan. Evaluated on creativity, clarity, feasibility, and handling investor questions.</p></div>
+            <div className="cell"><h3>Phase 2 — The Investment Round</h3><p>Students assigned as Investors evaluate pitches, ask probing questions, and decide where to allocate their virtual investment portfolio. Evaluated on asking the right questions, assessing risk, identifying opportunity, and making strategic decisions.</p></div>
+            <div className="cell"><h3>Phase 3 — The Summit Awards</h3><p>The summit crowns the Best Entrepreneur — whose idea won the most investment and admiration — and the Best Investor — whose portfolio choices showed the sharpest business acumen. An experience no textbook could provide.</p></div>
           </div>
+
+          <div className="sec-title">Business skills students learn</div>
+          <ul className="bullets">
+            <li><b>Pitching:</b> how to present an idea clearly, confidently, and compellingly</li>
+            <li><b>Market research:</b> understanding your audience, competition, and industry landscape</li>
+            <li><b>Valuation:</b> how businesses are valued and what makes them investable</li>
+            <li><b>ROI &amp; risk:</b> return on investment, risk assessment, and financial thinking</li>
+            <li><b>Term sheets:</b> the basics of deal-making and investment terms</li>
+            <li><b>Storytelling:</b> how the best entrepreneurs make investors believe in their vision</li>
+          </ul>
+
+          <div className="sec-title">Event highlights</div>
+          <table className="hl-table">
+            <tbody>
+              <tr><th>Duration</th><td>1 – 2 Days</td></tr>
+              <tr><th>Suitable for</th><td>Grade 9 onwards</td></tr>
+              <tr><th>Roles</th><td>Innovator (Entrepreneur) &amp; Investor</td></tr>
+              <tr><th>Awards</th><td>Best Entrepreneur, Best Investor, Most Innovative Idea, Best Pitch</td></tr>
+              <tr><th>Language</th><td>English</td></tr>
+            </tbody>
+          </table>
 
           <div className="cta-band">
             <h4>Got an idea? Ready to invest? Join Innovation Assembly at YANF.</h4>
             <a className="btn solid" href="#page-contact" onClick={(e) => handleLink(e, 'page-contact')}>Register interest</a>
+          </div>
+
+          <div className="sec-title">Explore the world of entrepreneurship</div>
+          <p className="body-text" style={{ marginBottom: '26px' }}>Explore these globally recognised platforms to understand how real entrepreneurs and investors think, pitch, and build businesses.</p>
+          <div className="links-grid">
+            <a href="https://www.ycombinator.com" target="_blank" rel="noopener noreferrer"><b>Y Combinator</b><p>World's top startup accelerator &amp; pitch resources</p><span>Visit website →</span></a>
+            <a href="https://www.ted.com/topics/business" target="_blank" rel="noopener noreferrer"><b>TED — Business</b><p>Best entrepreneurship &amp; innovation talks</p><span>Visit website →</span></a>
+            <a href="https://www.investopedia.com" target="_blank" rel="noopener noreferrer"><b>Investopedia</b><p>Learn business &amp; investing terms</p><span>Visit website →</span></a>
+            <a href="https://www.sonyliv.com/shows/shark-tank-india" target="_blank" rel="noopener noreferrer"><b>Shark Tank India</b><p>Watch real pitches &amp; investor decisions</p><span>Visit website →</span></a>
+            <a href="https://www.startupindia.gov.in" target="_blank" rel="noopener noreferrer"><b>Startup India</b><p>Government of India's startup ecosystem portal</p><span>Visit website →</span></a>
+            <a href="https://www.forbes.com/entrepreneurs" target="_blank" rel="noopener noreferrer"><b>Forbes Entrepreneurs</b><p>Stories &amp; insights from the world's top founders</p><span>Visit website →</span></a>
           </div>
 
           <div className="cta-row" style={{ marginTop: '56px' }}>
@@ -415,11 +565,11 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
           <div className="info-grid">
             <div className="cell">
               <h3>Email</h3>
-              <p><a href="mailto:aditya@yanfglobal.com">aditya@yanfglobal.com</a></p>
+              <p><a href="mailto:aditya@yanfglobal.com" style={{ color: 'var(--ice)', textDecoration: 'none' }}>aditya@yanfglobal.com</a></p>
             </div>
             <div className="cell">
               <h3>For schools</h3>
-              <p>We run on-campus workshops and inter-school assemblies. Write to <a href="mailto:hello@yanfglobal.com">hello@yanfglobal.com</a>.</p>
+              <p>We run on-campus workshops and inter-school assemblies. Write to <a href="mailto:hello@yanfglobal.com" style={{ color: 'var(--ice)', textDecoration: 'none' }}>hello@yanfglobal.com</a>.</p>
             </div>
             <div className="cell">
               <h3>Follow</h3>

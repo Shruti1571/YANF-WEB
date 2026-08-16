@@ -24,47 +24,44 @@ export default function ArticleCreationForm({
   wordCount, computedReadTime
 }) {
   return (
-    <div style={{ background: 'rgba(8,17,26,0.85)', border: '1px solid var(--line)', padding: '32px', borderRadius: '8px' }}>
-      <h2 style={{ fontSize: '1.3rem', fontWeight: 500, marginBottom: '24px', color: 'var(--ice)' }}>Article Creation Pane</h2>
+    <div className="studio-card">
+      <div className="studio-section-header">
+        <h2>Article Creation Pane</h2>
+        <p>Compose and publish articles directly to MongoDB.</p>
+      </div>
 
       <form onSubmit={handlePublishPost}>
-        {/* Title & Slug */}
+        {/* Title */}
         <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', fontFamily: 'var(--mono)', fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ice)', marginBottom: '6px' }}>
-            Article Title *
-          </label>
+          <label className="studio-label">Article Title *</label>
           <input
             type="text"
+            className="studio-input"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g. How to Master Geopolitical Negotiation in Model UN"
             required
-            style={{ width: '100%', padding: '14px', background: 'rgba(6,13,20,0.9)', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '1.05rem', borderRadius: '4px' }}
           />
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px', marginBottom: '20px' }}>
           <div>
-            <label style={{ display: 'block', fontFamily: 'var(--mono)', fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ink-dim)', marginBottom: '6px' }}>
-              URL Slug
-            </label>
+            <label className="studio-label">URL Slug</label>
             <input
               type="text"
+              className="studio-input"
               value={slug}
               onChange={(e) => setSlug(e.target.value)}
               placeholder="master-mun-diplomacy"
-              style={{ width: '100%', padding: '10px', background: 'rgba(6,13,20,0.9)', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '0.88rem', borderRadius: '4px' }}
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', fontFamily: 'var(--mono)', fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ink-dim)', marginBottom: '6px' }}>
-              Category
-            </label>
+            <label className="studio-label">Category</label>
             <select
+              className="studio-select"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              style={{ width: '100%', padding: '10px', background: 'rgba(6,13,20,0.9)', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '0.88rem', borderRadius: '4px' }}
             >
               <option value="Diplomacy">Diplomacy</option>
               <option value="Debates">Debates</option>
@@ -75,152 +72,133 @@ export default function ArticleCreationForm({
           </div>
 
           <div>
-            <label style={{ display: 'block', fontFamily: 'var(--mono)', fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ink-dim)', marginBottom: '6px' }}>
-              Author Name
-            </label>
+            <label className="studio-label">Author Name</label>
             <input
               type="text"
+              className="studio-input"
               value={author}
               onChange={(e) => setAuthor(e.target.value)}
               placeholder="YANF Editorial"
-              style={{ width: '100%', padding: '10px', background: 'rgba(6,13,20,0.9)', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '0.88rem', borderRadius: '4px' }}
             />
           </div>
         </div>
 
         {/* FEATURED COVER IMAGE UPLOADER */}
-        <div style={{ background: 'rgba(6,13,20,0.6)', border: '1px solid var(--line)', padding: '20px', borderRadius: '6px', marginBottom: '24px' }}>
+        <div className="studio-media-selector">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <span style={{ fontFamily: 'var(--mono)', fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)' }}>
-              🖼️ Featured Cover Image (Google Drive API)
-            </span>
-            {uploadingCover && <span style={{ color: 'var(--ice)', fontSize: '0.8rem' }}>Uploading to GDrive...</span>}
+            <label className="studio-label" style={{ margin: 0 }}>Featured Cover Image (Google Drive API)</label>
+            {uploadingCover && <span style={{ color: '#2563eb', fontSize: '12px' }}>Uploading to GDrive...</span>}
           </div>
 
           <input
             type="file"
             accept="image/*"
             onChange={handleUploadCover}
-            style={{ marginBottom: '16px', color: 'var(--ink-dim)', fontSize: '0.88rem' }}
+            style={{ marginBottom: '16px', fontSize: '13px' }}
           />
 
           {coverPreviewUrl && (
             <div style={{ marginBottom: '16px', display: 'flex', gap: '16px', alignItems: 'center' }}>
-              <img src={coverPreviewUrl} alt="Cover Preview" style={{ width: '120px', height: '70px', objectFit: 'cover', borderRadius: '4px', border: '1px solid var(--line)' }} />
-              <span style={{ fontSize: '0.8rem', color: 'var(--ice)' }}>File uploaded to Drive Folder ID: {coverDriveId}</span>
+              <img src={coverPreviewUrl} alt="Cover Preview" style={{ width: '120px', height: '70px', objectFit: 'cover', borderRadius: '6px', border: '1px solid #cbd5e1' }} />
+              <span style={{ fontSize: '12px', color: '#166534' }}>✓ Uploaded to Drive Folder ID: {coverDriveId}</span>
             </div>
           )}
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ fontSize: '10px', color: 'var(--ink-dim)', display: 'block', marginBottom: '4px' }}>Media Title</label>
-              <input type="text" value={coverTitle} onChange={(e) => setCoverTitle(e.target.value)} placeholder="e.g. UNSC Chamber Session" style={{ width: '100%', padding: '8px', background: 'rgba(8,17,26,0.9)', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '0.82rem' }} />
+              <label className="studio-label" style={{ fontSize: '11px' }}>Media Title</label>
+              <input type="text" className="studio-input" value={coverTitle} onChange={(e) => setCoverTitle(e.target.value)} placeholder="e.g. UNSC Chamber Session" style={{ padding: '8px 12px', fontSize: '13px' }} />
             </div>
             <div>
-              <label style={{ fontSize: '10px', color: 'var(--gold)', display: 'block', marginBottom: '4px' }}>Alt Text (Required for SEO) *</label>
-              <input type="text" value={coverAltText} onChange={(e) => setCoverAltText(e.target.value)} placeholder="e.g. Delegates seated in the UN Security Council" style={{ width: '100%', padding: '8px', background: 'rgba(8,17,26,0.9)', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '0.82rem' }} />
+              <label className="studio-label" style={{ fontSize: '11px' }}>Alt Text (Required for SEO) *</label>
+              <input type="text" className="studio-input" value={coverAltText} onChange={(e) => setCoverAltText(e.target.value)} placeholder="e.g. Delegates seated in UN" style={{ padding: '8px 12px', fontSize: '13px' }} />
             </div>
             <div>
-              <label style={{ fontSize: '10px', color: 'var(--ink-dim)', display: 'block', marginBottom: '4px' }}>Caption</label>
-              <input type="text" value={coverCaption} onChange={(e) => setCoverCaption(e.target.value)} placeholder="e.g. Delegates during committee session" style={{ width: '100%', padding: '8px', background: 'rgba(8,17,26,0.9)', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '0.82rem' }} />
+              <label className="studio-label" style={{ fontSize: '11px' }}>Caption</label>
+              <input type="text" className="studio-input" value={coverCaption} onChange={(e) => setCoverCaption(e.target.value)} placeholder="e.g. Delegates during session" style={{ padding: '8px 12px', fontSize: '13px' }} />
             </div>
             <div>
-              <label style={{ fontSize: '10px', color: 'var(--ink-dim)', display: 'block', marginBottom: '4px' }}>Description</label>
-              <input type="text" value={coverDescription} onChange={(e) => setCoverDescription(e.target.value)} placeholder="e.g. High resolution photo of assembly" style={{ width: '100%', padding: '8px', background: 'rgba(8,17,26,0.9)', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '0.82rem' }} />
+              <label className="studio-label" style={{ fontSize: '11px' }}>Description</label>
+              <input type="text" className="studio-input" value={coverDescription} onChange={(e) => setCoverDescription(e.target.value)} placeholder="e.g. High resolution photo" style={{ padding: '8px 12px', fontSize: '13px' }} />
             </div>
           </div>
         </div>
 
         {/* Summary */}
         <div style={{ marginBottom: '20px' }}>
-          <label style={{ display: 'block', fontFamily: 'var(--mono)', fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ice)', marginBottom: '6px' }}>
-            Summary / Excerpt *
-          </label>
+          <label className="studio-label">Summary / Excerpt *</label>
           <textarea
             rows={2}
+            className="studio-textarea"
             value={summary}
             onChange={(e) => setSummary(e.target.value)}
             placeholder="Brief 2-line overview of the article for blog cards and Google SERP snippets..."
             required
-            style={{ width: '100%', padding: '12px', background: 'rgba(6,13,20,0.9)', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '0.9rem', borderRadius: '4px', resize: 'vertical' }}
           />
         </div>
 
         {/* FORMATTING TOOLBAR & BODY CONTENT */}
         <div style={{ marginBottom: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-            <label style={{ fontFamily: 'var(--mono)', fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--ice)' }}>
-              Article Content (HTML/Markdown) *
-            </label>
-            <span style={{ fontSize: '0.78rem', color: 'var(--ink-dim)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <label className="studio-label" style={{ margin: 0 }}>Article Content *</label>
+            <span style={{ fontSize: '12px', color: '#64748b' }}>
               {wordCount} words ({computedReadTime})
             </span>
           </div>
 
           {/* Toolbar Buttons */}
-          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', padding: '8px', background: 'rgba(6,13,20,0.9)', border: '1px solid var(--line)', borderBottom: 'none', borderRadius: '4px 4px 0 0' }}>
-            <button type="button" onClick={() => insertFormatting('<b>', '</b>')} style={btnTbStyle}><b>B</b></button>
-            <button type="button" onClick={() => insertFormatting('<i>', '</i>')} style={btnTbStyle}><i>I</i></button>
-            <button type="button" onClick={() => insertFormatting('<h2>', '</h2>')} style={btnTbStyle}>H2</button>
-            <button type="button" onClick={() => insertFormatting('<h3>', '</h3>')} style={btnTbStyle}>H3</button>
-            <button type="button" onClick={() => insertFormatting('<blockquote>', '</blockquote>')} style={btnTbStyle}>Quote</button>
-            <button type="button" onClick={() => insertFormatting('<ul>\n  <li>', '</li>\n</ul>')} style={btnTbStyle}>List</button>
-            <button type="button" onClick={() => insertFormatting('<a href="https://">', '</a>')} style={btnTbStyle}>Link</button>
-            <button type="button" onClick={handleInsertMediaClick} style={{ ...btnTbStyle, background: 'rgba(143,208,255,0.15)', color: 'var(--ice)', borderColor: 'var(--ice)' }}>📷 Insert In-Body Media</button>
+          <div className="studio-toolbar">
+            <button type="button" onClick={() => insertFormatting('<b>', '</b>')} className="studio-toolbar-btn"><b>B</b></button>
+            <button type="button" onClick={() => insertFormatting('<i>', '</i>')} className="studio-toolbar-btn"><i>I</i></button>
+            <button type="button" onClick={() => insertFormatting('<h2>', '</h2>')} className="studio-toolbar-btn">H2</button>
+            <button type="button" onClick={() => insertFormatting('<h3>', '</h3>')} className="studio-toolbar-btn">H3</button>
+            <button type="button" onClick={() => insertFormatting('<blockquote>', '</blockquote>')} className="studio-toolbar-btn">Quote</button>
+            <button type="button" onClick={() => insertFormatting('<ul>\n  <li>', '</li>\n</ul>')} className="studio-toolbar-btn">List</button>
+            <button type="button" onClick={() => insertFormatting('<a href="https://">', '</a>')} className="studio-toolbar-btn">Link</button>
+            <button type="button" onClick={handleInsertMediaClick} className="studio-toolbar-btn" style={{ background: '#e0e7ff', color: '#4f46e5', borderColor: '#c7d2fe' }}>📷 Insert In-Body Media</button>
           </div>
 
           <textarea
             ref={textareaRef}
             rows={12}
+            className="studio-textarea rich-text"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Write your article body content here..."
             required
-            style={{ width: '100%', padding: '14px', background: 'rgba(6,13,20,0.95)', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '0.95rem', lineHeight: '1.7', borderRadius: '0 0 4px 4px', resize: 'vertical' }}
           />
         </div>
 
         {/* Meta tags for SEO */}
-        <div style={{ background: 'rgba(6,13,20,0.5)', border: '1px solid var(--line)', padding: '16px', borderRadius: '4px', marginBottom: '28px' }}>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: '12px' }}>
-            🔍 SEO &amp; OpenGraph Settings
+        <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', padding: '16px', borderRadius: '8px', marginBottom: '24px' }}>
+          <div className="studio-label" style={{ marginBottom: '12px', color: '#0f172a' }}>
+            SEO &amp; OpenGraph Settings
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
             <div>
-              <label style={{ fontSize: '10px', color: 'var(--ink-dim)', display: 'block', marginBottom: '4px' }}>Meta Title</label>
-              <input type="text" value={metaTitle} onChange={(e) => setMetaTitle(e.target.value)} style={{ width: '100%', padding: '8px', background: 'rgba(8,17,26,0.9)', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '0.82rem' }} />
+              <label className="studio-label" style={{ fontSize: '11px' }}>Meta Title</label>
+              <input type="text" className="studio-input" value={metaTitle} onChange={(e) => setMetaTitle(e.target.value)} style={{ padding: '8px 12px', fontSize: '13px' }} />
             </div>
             <div>
-              <label style={{ fontSize: '10px', color: 'var(--ink-dim)', display: 'block', marginBottom: '4px' }}>Focus Keywords</label>
-              <input type="text" value={metaKeywords} onChange={(e) => setMetaKeywords(e.target.value)} placeholder="MUN, Diplomacy, Debate" style={{ width: '100%', padding: '8px', background: 'rgba(8,17,26,0.9)', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '0.82rem' }} />
+              <label className="studio-label" style={{ fontSize: '11px' }}>Focus Keywords</label>
+              <input type="text" className="studio-input" value={metaKeywords} onChange={(e) => setMetaKeywords(e.target.value)} placeholder="MUN, Diplomacy, Debate" style={{ padding: '8px 12px', fontSize: '13px' }} />
             </div>
             <div style={{ gridColumn: 'span 2' }}>
-              <label style={{ fontSize: '10px', color: 'var(--ink-dim)', display: 'block', marginBottom: '4px' }}>Meta Description (Google Snippet)</label>
-              <input type="text" value={metaDescription} onChange={(e) => setMetaDescription(e.target.value)} style={{ width: '100%', padding: '8px', background: 'rgba(8,17,26,0.9)', border: '1px solid var(--line)', color: 'var(--ink)', fontSize: '0.82rem' }} />
+              <label className="studio-label" style={{ fontSize: '11px' }}>Meta Description (Google Snippet)</label>
+              <input type="text" className="studio-input" value={metaDescription} onChange={(e) => setMetaDescription(e.target.value)} style={{ padding: '8px 12px', fontSize: '13px' }} />
             </div>
           </div>
         </div>
 
         <button
           type="submit"
-          className="btn solid"
+          className="btn-primary"
           disabled={submitLoading}
-          style={{ width: '100%', padding: '16px', justifyContent: 'center' }}
+          style={{ width: '100%', padding: '14px', fontSize: '15px', fontWeight: '600' }}
         >
-          {submitLoading ? 'Publishing to MongoDB...' : 'Publish Article Live 🚀'}
+          {submitLoading ? 'Publishing to MongoDB...' : 'Publish Article Live'}
         </button>
       </form>
     </div>
   );
 }
-
-const btnTbStyle = {
-  padding: '6px 12px',
-  background: 'rgba(8,17,26,0.9)',
-  border: '1px solid var(--line)',
-  color: 'var(--ink)',
-  fontFamily: 'var(--mono)',
-  fontSize: '11px',
-  cursor: 'pointer',
-  borderRadius: '3px'
-};

@@ -578,3 +578,102 @@
 .data-table tr:hover td {
   background: #f8fafc;
 }
+
+/* Media Selector Container */
+.studio-media-selector {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+/* Rich Text Toolbar */
+.studio-toolbar {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-bottom: none;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.studio-toolbar-btn {
+  padding: 5px 11px;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #334155;
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.studio-toolbar-btn:hover {
+  background: #e0e7ff;
+  color: #4f46e5;
+  border-color: #c7d2fe;
+}
+
+.studio-textarea.rich-text {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* ReactQuill WYSIWYG Editor Custom Styling */
+.ql-toolbar.ql-snow {
+  background: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+  padding: 10px 14px !important;
+}
+
+.ql-container.ql-snow {
+  border-color: #cbd5e1 !important;
+  border-bottom-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+  font-family: var(--display) !important;
+  font-size: 15px !important;
+  min-height: 320px !important;
+  background: #ffffff !important;
+}
+
+.ql-editor {
+  min-height: 320px !important;
+  line-height: 1.8 !important;
+  color: #0f172a !important;
+  padding: 18px 20px !important;
+}
+
+.ql-editor.ql-blank::before {
+  color: #94a3b8 !important;
+  font-style: normal !important;
+}
+
+.ql-snow .ql-stroke {
+  stroke: #475569 !important;
+}
+
+.ql-snow .ql-fill {
+  fill: #475569 !important;
+}
+
+.ql-snow .ql-picker {
+  color: #475569 !important;
+}
+
+.ql-snow.ql-toolbar button:hover .ql-stroke,
+.ql-snow .ql-toolbar button:hover .ql-stroke {
+  stroke: #2563eb !important;
+}
+
+.ql-snow.ql-toolbar button:hover .ql-fill,
+.ql-snow .ql-toolbar button:hover .ql-fill {
+  fill: #2563eb !important;
+}

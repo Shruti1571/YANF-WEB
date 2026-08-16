@@ -18,6 +18,15 @@ export default function MediaLibraryStudio({ mediaGallery, setMediaGallery, uplo
   const [uploadSeoAlt, setUploadSeoAlt] = useState('');
   const [uploadSeoCaption, setUploadSeoCaption] = useState('');
   const [uploadSeoDescription, setUploadSeoDescription] = useState('');
+  const [detectedDimensions, setDetectedDimensions] = useState('Auto');
+
+  // Helper to format exact file size in Bytes, KB, or MB
+  const formatFileSize = (bytes) => {
+    if (!bytes || isNaN(bytes) || bytes <= 0) return 'Auto';
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+  };
 
   // Map user uploaded media items
   const galleryList = (mediaGallery || []).map((item, idx) => {
@@ -26,8 +35,8 @@ export default function MediaLibraryStudio({ mediaGallery, setMediaGallery, uplo
         id: `uploaded-${idx}`,
         url: item,
         title: `Uploaded Asset #${idx + 1}`,
-        dimensions: '1920 x 1080 px',
-        size: '1.2 MB',
+        dimensions: 'Auto',
+        size: 'Auto',
         fileType: 'JPEG',
         uploadDate: 'Recent',
         alt: '',
@@ -39,9 +48,9 @@ export default function MediaLibraryStudio({ mediaGallery, setMediaGallery, uplo
       id: item.id || item.driveFileId || `uploaded-${idx}`,
       url: item.url || item.thumbnailUrl,
       title: item.title || item.altText || `Uploaded Asset #${idx + 1}`,
-      dimensions: item.dimensions || '1920 x 1080 px',
-      size: item.size || '1.2 MB',
-      fileType: item.fileType || 'JPEG',
+      dimensions: item.dimensions || 'Auto',
+      size: typeof item.size === 'number' ? formatFileSize(item.size) : (item.size || 'Auto'),
+      fileType: item.fileType || 'PNG',
       uploadDate: item.uploadDate || 'Recent',
       alt: item.alt || item.altText || '',
       caption: item.caption || '',
@@ -66,6 +75,7 @@ export default function MediaLibraryStudio({ mediaGallery, setMediaGallery, uplo
     setUploadSeoAlt('');
     setUploadSeoCaption('');
     setUploadSeoDescription('');
+    setDetectedDimensions('Detecting...');
     setIsUploadModalOpen(true);
   };
 
@@ -89,13 +99,16 @@ export default function MediaLibraryStudio({ mediaGallery, setMediaGallery, uplo
       }
     }
     
+    const formattedSize = pendingFile ? formatFileSize(pendingFile.size) : 'Auto';
+    const ext = pendingFile?.name?.split('.').pop()?.toUpperCase() || 'PNG';
+
     const newAsset = {
       id: driveFileId || `uploaded-${Date.now()}`,
       url: realDriveUrl,
       title: uploadSeoTitle || pendingFile?.name || 'Uploaded Asset',
-      dimensions: '1920 x 1080 px',
-      size: pendingFile ? `${(pendingFile.size / (1024 * 1024)).toFixed(1)} MB` : '1.2 MB',
-      fileType: pendingFile?.type ? pendingFile.type.split('/')[1]?.toUpperCase() : 'JPEG',
+      dimensions: detectedDimensions !== 'Detecting...' ? detectedDimensions : 'Auto',
+      size: formattedSize,
+      fileType: ext,
       uploadDate: 'Just now',
       alt: uploadSeoAlt,
       caption: uploadSeoCaption,
@@ -286,6 +299,11 @@ export default function MediaLibraryStudio({ mediaGallery, setMediaGallery, uplo
                 <img 
                   src={selectedMedia.url} 
                   alt={selectedMedia.alt || 'Asset view'} 
+                  onLoad={(e) => {
+                    if (e.target.naturalWidth && e.target.naturalHeight) {
+                      setDetectedDimensions(`${e.target.naturalWidth} x ${e.target.naturalHeight} px`);
+                    }
+                  }}
                   style={{ 
                     maxWidth: '100%', 
                     maxHeight: isImageMaximized ? '82vh' : '65vh', 
@@ -296,7 +314,7 @@ export default function MediaLibraryStudio({ mediaGallery, setMediaGallery, uplo
                 />
 
                 <div style={{ position: 'absolute', bottom: '12px', left: '16px', background: 'rgba(0,0,0,0.6)', color: '#fff', padding: '4px 10px', borderRadius: '6px', fontSize: '11px', backdropFilter: 'blur(4px)' }}>
-                  {selectedMedia.dimensions || '1920 x 1080 px'} • {selectedMedia.size || '1.2 MB'}
+                  {selectedMedia.dimensions && selectedMedia.dimensions !== 'Auto' ? selectedMedia.dimensions : detectedDimensions} • {selectedMedia.size}
                 </div>
               </div>
 
@@ -306,9 +324,9 @@ export default function MediaLibraryStudio({ mediaGallery, setMediaGallery, uplo
                   <form onSubmit={handleUpdateMediaDetails}>
                     
                     <div style={{ background: '#f8fafc', padding: '12px 14px', borderRadius: '10px', border: '1px solid #e2e8f0', marginBottom: '20px', fontSize: '12.5px', color: '#475569', display: 'flex', flexWrap: 'wrap', gap: '16px' }}>
-                      <div><strong>Format:</strong> {selectedMedia.fileType || 'JPEG'}</div>
-                      <div><strong>Size:</strong> {selectedMedia.size || '1.2 MB'}</div>
-                      <div><strong>Dimensions:</strong> {selectedMedia.dimensions || '1920 x 1080 px'}</div>
+                      <div><strong>Format:</strong> {selectedMedia.fileType || 'PNG'}</div>
+                      <div><strong>Size:</strong> {selectedMedia.size}</div>
+                      <div><strong>Dimensions:</strong> {selectedMedia.dimensions && selectedMedia.dimensions !== 'Auto' ? selectedMedia.dimensions : detectedDimensions}</div>
                     </div>
 
                     <div style={{ marginBottom: '16px' }}>
@@ -422,6 +440,11 @@ export default function MediaLibraryStudio({ mediaGallery, setMediaGallery, uplo
                   <img 
                     src={previewUrl} 
                     alt="Upload preview" 
+                    onLoad={(e) => {
+                      if (e.target.naturalWidth && e.target.naturalHeight) {
+                        setDetectedDimensions(`${e.target.naturalWidth} x ${e.target.naturalHeight} px`);
+                      }
+                    }}
                     style={{ maxWidth: '100%', maxHeight: '65vh', objectFit: 'contain', borderRadius: '8px', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }} 
                   />
                 )}
