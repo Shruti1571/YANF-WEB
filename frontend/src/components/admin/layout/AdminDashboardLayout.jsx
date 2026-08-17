@@ -18,7 +18,8 @@ export default function AdminDashboardLayout({ state }) {
     coverDriveId, setCoverDriveId, coverAltText, setCoverAltText,
     mediaGallery, setMediaGallery, handlePublishPost, submitLoading,
     wordCount, computedReadTime, uploadingCover, handleUploadCover,
-    publishedBlogs, loadingBlogs, loadBlogs, handleDeletePost
+    publishedBlogs, loadingBlogs, loadBlogs, handleDeletePost,
+    editingPostId, setEditingPostId, handleEditPost, handleNewPost
   } = state;
 
   const [dismissedMsg, setDismissedMsg] = useState('');
@@ -30,7 +31,7 @@ export default function AdminDashboardLayout({ state }) {
 
   return (
     <div className="glass-dashboard-root">
-      <AdminSidebar activeTab={currentTab} setActiveTab={setActiveTab} handleLogout={handleLogout} />
+      <AdminSidebar activeTab={currentTab} setActiveTab={setActiveTab} handleLogout={handleLogout} currentUser={currentUser} />
 
       <main className="glass-main-wrapper">
         <AdminHeader 
@@ -52,7 +53,10 @@ export default function AdminDashboardLayout({ state }) {
               loadingBlogs={loadingBlogs}
               loadBlogs={loadBlogs}
               handleDeletePost={handleDeletePost}
+              handleEditPost={handleEditPost}
+              handleNewPost={handleNewPost}
               setActiveTab={setActiveTab}
+              currentUser={currentUser}
             />
           )}
 
@@ -71,10 +75,17 @@ export default function AdminDashboardLayout({ state }) {
               coverDriveId={coverDriveId} setCoverDriveId={setCoverDriveId}
               coverAltText={coverAltText} setCoverAltText={setCoverAltText}
               mediaGallery={mediaGallery}
+              setMediaGallery={setMediaGallery}
+              uploadingCover={uploadingCover}
+              handleUploadCover={handleUploadCover}
               handlePublishPost={handlePublishPost}
               submitLoading={submitLoading}
               wordCount={wordCount} computedReadTime={computedReadTime}
               setActiveTab={setActiveTab}
+              currentUser={currentUser}
+              editingPostId={editingPostId}
+              setEditingPostId={setEditingPostId}
+              handleNewPost={handleNewPost}
             />
           )}
 
@@ -84,6 +95,7 @@ export default function AdminDashboardLayout({ state }) {
               setMediaGallery={setMediaGallery}
               uploadingCover={uploadingCover}
               handleUploadCover={handleUploadCover}
+              currentUser={currentUser}
             />
           )}
 

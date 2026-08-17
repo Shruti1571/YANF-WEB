@@ -27,7 +27,23 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
+    enum: ['superadmin', 'admin'],
     default: 'admin'
+  },
+  isActive: {
+    type: Boolean,
+    default: true
+  },
+  permissions: {
+    blogs: { type: Boolean, default: true },
+    media: { type: Boolean, default: true },
+    certificates: { type: Boolean, default: false },
+    gallery: { type: Boolean, default: false },
+    hallOfFame: { type: Boolean, default: false },
+    users: { type: Boolean, default: false }
+  },
+  lastLoginAt: {
+    type: Date
   },
   createdAt: {
     type: Date,

@@ -21,11 +21,15 @@ function authAdmin(req, res, next) {
   }
 }
 
-// GET /api/blogs — Public list of published blogs
+// GET /api/blogs — Public list of published blogs (or all for admin)
 router.get('/', async (req, res) => {
   try {
-    const { category, search } = req.query;
-    const filter = { status: 'published' };
+    const { category, search, all } = req.query;
+    const filter = {};
+
+    if (all !== 'true') {
+      filter.status = 'published';
+    }
 
     if (category && category !== 'All') {
       filter.category = category;
@@ -118,9 +122,69 @@ router.post('/', authAdmin, async (req, res) => {
   }
 });
 
+// PUT /api/blogs/:id — Update existing blog post (Protected Admin)
+router.put('/:id', authAdmin, async (req, res) => {
+  try {
+    const {
+      title,
+      slug,
+      metaTitle,
+      metaDescription,
+      metaKeywords,
+      category,
+      author,
+      readTime,
+      summary,
+      content,
+      coverImage,
+      status
+    } = req.body;
+
+    const blog = await Blog.findById(req.params.id);
+    if (!blog) {
+      return res.status(404).json({ error: 'Blog post not found.' });
+    }
+
+    if (slug !== undefined) {
+      const sanitizedSlug = slug.toLowerCase().replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
+      if (sanitizedSlug && sanitizedSlug !== blog.slug) {
+        // Check uniqueness across other blog posts
+        const duplicate = await Blog.findOne({ slug: sanitizedSlug, _id: { $ne: blog._id } });
+        if (duplicate) {
+          return res.status(400).json({ error: `The permalink slug '${sanitizedSlug}' is already in use by another article.` });
+        }
+        blog.slug = sanitizedSlug;
+      }
+    }
+
+    if (title !== undefined) blog.title = title;
+    if (metaTitle !== undefined) blog.metaTitle = metaTitle;
+    if (metaDescription !== undefined) blog.metaDescription = metaDescription;
+    if (metaKeywords !== undefined) blog.metaKeywords = metaKeywords;
+    if (category !== undefined) blog.category = category;
+    if (author !== undefined) blog.author = author;
+    if (readTime !== undefined) blog.readTime = readTime;
+    if (summary !== undefined) blog.summary = summary;
+    if (content !== undefined) blog.content = content;
+    if (coverImage !== undefined) blog.coverImage = coverImage;
+    if (status !== undefined) blog.status = status;
+    blog.updatedAt = new Date();
+
+    await blog.save();
+    res.json(blog);
+  } catch (error) {
+    console.error('Update blog error:', error);
+    res.status(500).json({ error: error.message || 'Failed to update blog post.' });
+  }
+});
+
 // DELETE /api/blogs/:id — Delete blog post (Protected Admin)
 router.delete('/:id', authAdmin, async (req, res) => {
   try {
+    if (req.user.role !== 'superadmin') {
+      return res.status(403).json({ error: 'Permission denied. Deletion is restricted strictly to Super Admin.' });
+    }
+
     const deletedBlog = await Blog.findByIdAndDelete(req.params.id);
     if (!deletedBlog) {
       return res.status(404).json({ error: 'Blog post not found.' });

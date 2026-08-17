@@ -63,14 +63,37 @@ export async function createBlogPost(blogData) {
   return data;
 }
 
-export async function fetchPublishedBlogs(category = '', search = '') {
+export async function updateBlogPost(id, blogData) {
+  const res = await fetch(`${API_BASE_URL}/blogs/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders()
+    },
+    body: JSON.stringify(blogData)
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Failed to update blog post.');
+  return data;
+}
+
+export async function fetchPublishedBlogs(category = '', search = '', all = false) {
   const params = new URLSearchParams();
-  if (category) params.append('category', category);
+  if (category && category !== 'All') params.append('category', category);
   if (search) params.append('search', search);
+  if (all) params.append('all', 'true');
 
   const res = await fetch(`${API_BASE_URL}/blogs?${params.toString()}`);
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Failed to fetch blog posts.');
+  return data;
+}
+
+export async function fetchBlogBySlug(slug) {
+  const res = await fetch(`${API_BASE_URL}/blogs/${encodeURIComponent(slug)}`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Failed to fetch article details.');
   return data;
 }
 
@@ -99,5 +122,45 @@ export async function addNewAdminUser(adminData) {
 
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Failed to create new admin user.');
+  return data;
+}
+
+export async function fetchAdminUsers() {
+  const res = await fetch(`${API_BASE_URL}/auth/users`, {
+    headers: {
+      ...getAuthHeaders()
+    }
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Failed to fetch admin users.');
+  return data;
+}
+
+export async function updateAdminUserPermissions(id, updateData) {
+  const res = await fetch(`${API_BASE_URL}/auth/users/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      ...getAuthHeaders()
+    },
+    body: JSON.stringify(updateData)
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Failed to update user permissions.');
+  return data;
+}
+
+export async function deleteAdminUser(id) {
+  const res = await fetch(`${API_BASE_URL}/auth/users/${id}`, {
+    method: 'DELETE',
+    headers: {
+      ...getAuthHeaders()
+    }
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Failed to delete user account.');
   return data;
 }

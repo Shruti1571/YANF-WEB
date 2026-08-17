@@ -18,13 +18,25 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Hash router state synchronization
+  // Hash & Permalink router state synchronization
   useEffect(() => {
+    // If user lands directly on /blog/:slug path, redirect to #page-blogs/:slug
+    if (window.location.pathname.startsWith('/blog/')) {
+      const directSlug = window.location.pathname.replace('/blog/', '').replace(/\/$/, '');
+      if (directSlug) {
+        window.location.hash = `#page-blogs/${directSlug}`;
+      }
+    }
+
     const handleHashChange = () => {
       const hash = window.location.hash;
       if (hash.startsWith('#page-')) {
-        setActivePage(hash.slice(1));
+        const basePageId = hash.slice(1).split('/')[0];
+        setActivePage(basePageId);
         document.body.style.overflow = 'hidden';
+      } else if (hash.startsWith('#blog/')) {
+        const slug = hash.replace('#blog/', '');
+        window.location.hash = `#page-blogs/${slug}`;
       } else {
         setActivePage(null);
         document.body.style.overflow = '';

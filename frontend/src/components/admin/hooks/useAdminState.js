@@ -1,13 +1,39 @@
 import { useState, useEffect, useRef } from 'react';
-import { loginStep1, verifyOtp, uploadImageToDrive, createBlogPost, fetchPublishedBlogs, deleteBlogPost } from '../../../services/api';
+import { loginStep1, verifyOtp, uploadImageToDrive, createBlogPost, updateBlogPost, fetchPublishedBlogs, deleteBlogPost } from '../../../services/api';
 
 export function useAdminState() {
   // Auth state
   const [token, setToken] = useState(localStorage.getItem('yanf_admin_token') || '');
   const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('yanf_admin_user') || 'null'));
 
-  // Studio Active Tab State: 'editor' | 'media' | 'users' | 'library'
-  const [activeTab, setActiveTab] = useState('editor');
+  // Editing existing post ID (null = creating new post)
+  const [editingPostId, setEditingPostId] = useState(null);
+
+  // Studio Active Tab State
+  const [activeTab, setActiveTabState] = useState(() => {
+    const hash = window.location.hash;
+    const match = hash.match(/^#page-admin\/(.+)$/);
+    return match ? match[1] : 'dashboard';
+  });
+
+  const setActiveTab = (tab) => {
+    setActiveTabState(tab);
+    window.location.hash = `#page-admin/${tab}`;
+  };
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      const match = hash.match(/^#page-admin\/(.+)$/);
+      if (match) {
+        setActiveTabState(match[1]);
+      } else if (hash === '#page-admin') {
+        setActiveTabState('dashboard');
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   // Step 1 & 2 Login state
   const [loginStep, setLoginStep] = useState(1);
@@ -89,7 +115,7 @@ export function useAdminState() {
   const loadBlogs = async () => {
     setLoadingBlogs(true);
     try {
-      const data = await fetchPublishedBlogs();
+      const data = await fetchPublishedBlogs('', '', true);
       setPublishedBlogs(data);
     } catch (err) {
       console.error(err);
@@ -199,9 +225,9 @@ export function useAdminState() {
     }
   };
 
-  // Publish Blog Post Handler
-  const handlePublishPost = async (e) => {
-    e.preventDefault();
+  // Publish / Save Draft Blog Post Handler
+  const handlePublishPost = async (e, statusToSet = 'published') => {
+    if (e && e.preventDefault) e.preventDefault();
     if (!title || !summary || !content) {
       alert('Title, Summary, and Content fields are required.');
       return;
@@ -216,23 +242,56 @@ export function useAdminState() {
         coverImage: coverPreviewUrl ? {
           url: coverPreviewUrl, driveFileId: coverDriveId, altText: coverAltText || title
         } : undefined,
-        status: 'published'
+        status: statusToSet
       };
 
-      await createBlogPost(blogData);
-      setStatusMsg('🎉 Article published live to MongoDB Atlas!');
+      if (editingPostId) {
+        await updateBlogPost(editingPostId, blogData);
+        setStatusMsg(statusToSet === 'draft' ? '📝 Draft updated successfully in MongoDB Atlas!' : '🎉 Article updated and published live to MongoDB Atlas!');
+      } else {
+        await createBlogPost(blogData);
+        setStatusMsg(statusToSet === 'draft' ? '📝 Draft saved successfully in MongoDB Atlas!' : '🎉 Article published live to MongoDB Atlas!');
+      }
       
       // Reset editor
+      setEditingPostId(null);
       setTitle(''); setSlug(''); setSummary(''); setContent('');
       setCoverPreviewUrl(''); setCoverDriveId(''); setCoverAltText('');
       
       loadBlogs();
-      setActiveTab('library');
+      setActiveTab('posts');
     } catch (err) {
-      setStatusMsg('❌ Publishing failed: ' + err.message);
+      setStatusMsg('❌ Action failed: ' + err.message);
     } finally {
       setSubmitLoading(false);
     }
+  };
+
+  const handleEditPost = (blog) => {
+    if (!blog) return;
+    setEditingPostId(blog._id);
+    setTitle(blog.title || '');
+    setSlug(blog.slug || '');
+    setCategory(blog.category || 'Diplomacy');
+    setAuthor(blog.author || 'YANF Editorial');
+    setSummary(blog.summary || '');
+    setContent(blog.content || '');
+    setMetaTitle(blog.metaTitle || '');
+    setMetaDescription(blog.metaDescription || '');
+    setMetaKeywords(blog.metaKeywords || '');
+    setCoverPreviewUrl(blog.coverImage?.url || '');
+    setCoverDriveId(blog.coverImage?.driveFileId || '');
+    setCoverAltText(blog.coverImage?.altText || '');
+    setActiveTab('editor');
+  };
+
+  const handleNewPost = () => {
+    setEditingPostId(null);
+    setTitle(''); setSlug(''); setSummary(''); setContent('');
+    setMetaTitle(''); setMetaDescription(''); setMetaKeywords('');
+    setCoverPreviewUrl(''); setCoverDriveId(''); setCoverAltText('');
+    setCategory('Diplomacy'); setAuthor('YANF Editorial');
+    setActiveTab('editor');
   };
 
   const handleDeletePost = async (id) => {
@@ -245,7 +304,15 @@ export function useAdminState() {
     }
   };
 
-  const wordCount = content.trim() ? content.trim().split(/\s+/).length : 0;
+  const cleanText = (content || '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&#160;/gi, ' ')
+    .replace(/&[a-z0-9#]+;/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const wordCount = cleanText ? cleanText.split(/\s+/).filter(Boolean).length : 0;
   const computedReadTime = `${Math.max(1, Math.ceil(wordCount / 200))} min read`;
 
   return {
@@ -254,6 +321,7 @@ export function useAdminState() {
     passwordInput, setPasswordInput, showPassword, setShowPassword,
     otpDigits, otpInputRefs, maskedEmail, authError, authLoading,
     publishedBlogs, loadingBlogs, mediaGallery, setMediaGallery,
+    editingPostId, setEditingPostId, handleEditPost, handleNewPost,
     title, setTitle, slug, setSlug, category, setCategory,
     author, setAuthor, summary, setSummary, content, setContent,
     metaTitle, setMetaTitle, metaDescription, setMetaDescription,

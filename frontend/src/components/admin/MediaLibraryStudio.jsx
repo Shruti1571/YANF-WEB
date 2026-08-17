@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function MediaLibraryStudio({ mediaGallery, setMediaGallery, uploadingCover, handleUploadCover }) {
+export default function MediaLibraryStudio({ mediaGallery, setMediaGallery, uploadingCover, handleUploadCover, currentUser }) {
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedUrl, setCopiedUrl] = useState(false);
@@ -384,24 +384,38 @@ export default function MediaLibraryStudio({ mediaGallery, setMediaGallery, uplo
                       </div>
                     </div>
 
+                    {/* UPLOADER ATTRIBUTION TAG (ADMIN-ONLY VISIBILITY) */}
+                    <div style={{ fontSize: '12.5px', color: '#475569', background: '#f1f5f9', padding: '6px 12px', borderRadius: '6px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span style={{ fontWeight: 600 }}>Uploaded by:</span> 
+                      <span style={{ color: '#2563eb', fontWeight: 600 }}>@{selectedMedia.uploadedBy || currentUser?.username || 'admin'}</span>
+                    </div>
+
                     {saveSuccess && (
                       <div style={{ background: '#dcfce7', color: '#15803d', border: '1px solid #86efac', padding: '8px 12px', borderRadius: '8px', fontSize: '12.5px', fontWeight: '500', marginBottom: '16px', textAlign: 'center' }}>
                         ✅ SEO Metadata saved successfully!
                       </div>
                     )}
 
-                    <div style={{ display: 'flex', gap: '12px' }}>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                       <button type="submit" className="btn-primary" style={{ flex: 1, background: saveSuccess ? '#16a34a' : '#2563eb' }}>
                         {saveSuccess ? 'Saved! ✓' : 'Save Changes'}
                       </button>
-                      <button 
-                        type="button" 
-                        className="btn-primary" 
-                        style={{ background: 'transparent', color: '#ef4444', border: '1px solid #fca5a5' }} 
-                        onClick={() => setItemToDelete(selectedMedia.id)}
-                      >
-                        Delete
-                      </button>
+                      
+                      {/* DELETE BUTTON (RESTRICTED EXCLUSIVELY TO SUPER ADMIN) */}
+                      {(currentUser?.role === 'superadmin') ? (
+                        <button 
+                          type="button" 
+                          className="btn-primary" 
+                          style={{ background: 'transparent', color: '#ef4444', border: '1px solid #fca5a5' }} 
+                          onClick={() => setItemToDelete(selectedMedia.id)}
+                        >
+                          Delete
+                        </button>
+                      ) : (
+                        <span style={{ fontSize: '11.5px', color: '#94a3b8', fontStyle: 'italic', padding: '0 4px' }}>
+                          🔒 Deletion restricted to Super Admin
+                        </span>
+                      )}
                     </div>
                   </form>
                 </div>

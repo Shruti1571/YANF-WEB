@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import UnderConstruction from './UnderConstruction';
 import AdminPanel from './AdminPanel';
+import PublicBlogPage from './PublicBlogPage';
 
 export default function PageOverlays({ activePage, onClose, onNavigate }) {
   const pageRefs = useRef({});
@@ -478,7 +479,7 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
         )}
       </div>
 
-      {/* BLOGS PAGE (UNDER CONSTRUCTION) */}
+      {/* BLOGS PAGE (DYNAMIC FEED OR UNDER CONSTRUCTION IF EMPTY) */}
       <div
         className={`page ${activePage === 'page-blogs' ? 'open' : ''}`}
         id="page-blogs"
@@ -486,19 +487,7 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
       >
         <button className="back" type="button" onClick={onClose}>✕ Close</button>
         {activePage === 'page-blogs' && (
-          <UnderConstruction
-            kicker="More · Editorial & Blogs"
-            title="The YANF Diplomatic Journal & Blog Feed"
-            badge="Under Construction • Launching Soon"
-            description="We are preparing our live publication hub where YANF mentors, guest diplomats, and delegate writers publish long-form geopolitical analysis, MUN briefing packs, policy commentary, and debate strategy."
-            bgMedia="yanf-wall.svg"
-            onNavigate={onNavigate}
-            features={[
-              { tag: "EDITORIAL 01", heading: "Geopolitical Briefings", text: "Weekly deep dives into active conflict zones, sanctions, and economic alliances." },
-              { tag: "EDITORIAL 02", heading: "Debate Masterclasses", text: "Tactical guides on AP/BP motions, POI strategies, and resolution drafting." },
-              { tag: "EDITORIAL 03", heading: "Delegate Spotlights", text: "Featured research papers and position pieces written by outstanding delegates." }
-            ]}
-          />
+          <PublicBlogPage onNavigate={onNavigate} />
         )}
       </div>
 
