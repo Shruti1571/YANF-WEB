@@ -1,5 +1,4 @@
 const QRCode = require('qrcode');
-const archiver = require('archiver');
 const Certificate = require('../models/Certificate');
 
 // Unambiguous character set (no 0, O, 1, I, L)
@@ -90,6 +89,14 @@ async function generateQrBuffer(certificateNumber) {
  * @param {Response} res - Express HTTP response object
  */
 async function streamQrZipArchive(certificates, res) {
+  let archiver;
+  try {
+    archiver = require('archiver');
+  } catch (e) {
+    const mod = await import('archiver');
+    archiver = mod.default || mod;
+  }
+
   const archive = archiver('zip', {
     zlib: { level: 9 }
   });
