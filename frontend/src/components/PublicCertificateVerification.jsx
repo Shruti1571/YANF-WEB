@@ -117,15 +117,22 @@ export default function PublicCertificateVerification({ onClose }) {
     return () => clearInterval(timer);
   }, [cooldown]);
 
-  // Lock background scroll when certificate modal or OTP modal is open
+  // Ensure body scroll remains locked while on certificates overlay
   useEffect(() => {
+    document.body.style.overflow = 'hidden';
+  }, []);
+
+  // Lock #page-certificates scroll when certificate lightbox or OTP modal is open
+  useEffect(() => {
+    const pageEl = document.getElementById('page-certificates');
+    if (!pageEl) return;
     if (verifiedRecord || isOtpModalOpen) {
-      document.body.style.overflow = 'hidden';
+      pageEl.style.overflowY = 'hidden';
     } else {
-      document.body.style.overflow = 'unset';
+      pageEl.style.overflowY = 'auto';
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      if (pageEl) pageEl.style.overflowY = 'auto';
     };
   }, [verifiedRecord, isOtpModalOpen]);
 

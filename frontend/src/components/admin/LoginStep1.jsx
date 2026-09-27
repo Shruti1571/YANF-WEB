@@ -48,6 +48,7 @@ export default function LoginStep1({
               value={usernameInput}
               onChange={(e) => setUsernameInput(e.target.value)}
               placeholder="e.g. mentor_alex"
+              autoComplete="username"
               required
             />
             <span className="field-icon">
@@ -65,6 +66,7 @@ export default function LoginStep1({
               value={passwordInput}
               onChange={(e) => setPasswordInput(e.target.value)}
               placeholder="••••••••••••"
+              autoComplete="current-password"
               required
             />
             <button

@@ -1,5 +1,4 @@
 const QRCode = require('qrcode');
-const { createCanvas, loadImage } = require('canvas');
 const archiver = require('archiver');
 const Certificate = require('../models/Certificate');
 
@@ -54,81 +53,35 @@ function getVerificationUrl(certificateNumber) {
 }
 
 /**
- * Generate QR code as Base64 Data URL
+ * Generate QR code as Base64 Data URL (Pure JavaScript)
  */
 async function generateQrDataUrl(certificateNumber) {
   const targetUrl = getVerificationUrl(certificateNumber);
-  const size = 320;
-  const paddingBottom = 40;
-  
-  const qrDataUrl = await QRCode.toDataURL(targetUrl, {
+  return await QRCode.toDataURL(targetUrl, {
     errorCorrectionLevel: 'H',
     margin: 2,
-    width: size,
+    width: 320,
     color: {
       dark: '#000000',
       light: '#ffffff'
     }
   });
-  
-  const qrImage = await loadImage(qrDataUrl);
-  const canvas = createCanvas(size, size + paddingBottom);
-  const ctx = canvas.getContext('2d');
-  
-  // Fill white background
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  // Draw QR code
-  ctx.drawImage(qrImage, 0, 0);
-  
-  // Draw text
-  ctx.fillStyle = '#000000';
-  ctx.font = 'bold 20px monospace';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(certificateNumber, size / 2, size + (paddingBottom / 2) - 4);
-  
-  return canvas.toDataURL('image/png');
 }
 
 /**
- * Generate high-res QR code PNG buffer for printing/export
+ * Generate high-res QR code PNG buffer for printing/export (Pure JavaScript)
  */
 async function generateQrBuffer(certificateNumber) {
   const targetUrl = getVerificationUrl(certificateNumber);
-  const size = 600;
-  const paddingBottom = 75;
-  
-  const qrDataUrl = await QRCode.toDataURL(targetUrl, {
+  return await QRCode.toBuffer(targetUrl, {
     errorCorrectionLevel: 'H',
     margin: 3,
-    width: size,
+    width: 600,
     color: {
       dark: '#000000',
       light: '#ffffff'
     }
   });
-  
-  const qrImage = await loadImage(qrDataUrl);
-  const canvas = createCanvas(size, size + paddingBottom);
-  const ctx = canvas.getContext('2d');
-  
-  // Fill white background
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  // Draw QR code
-  ctx.drawImage(qrImage, 0, 0);
-  
-  // Draw text
-  ctx.fillStyle = '#000000';
-  ctx.font = 'bold 36px monospace';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(certificateNumber, size / 2, size + (paddingBottom / 2) - 6);
-  
-  return canvas.toBuffer('image/png');
 }
 
 /**
