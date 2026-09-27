@@ -379,7 +379,9 @@ export default function BlogWritingStudio({
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: '#334155' }}>
                     <span style={{ fontWeight: 700, color: '#0f172a' }}>🔗 Article Permalink / Slug:</span>
-                    <span style={{ color: '#64748b', fontFamily: 'monospace' }}>yanfglobal.com/#page-blogs/</span>
+                    <span style={{ color: '#64748b', fontFamily: 'monospace' }}>
+                      {(typeof window !== 'undefined' ? window.location.host : (import.meta.env.VITE_SITE_URL || 'yanfglobal.com'))}/#page-blogs/
+                    </span>
                   </div>
 
                   <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -731,7 +733,7 @@ export default function BlogWritingStudio({
                   <div className="serp-favicon">Y</div>
                   <div>
                     <div className="serp-domain-text">YANF Global</div>
-                    <div className="serp-breadcrumb">https://yanfglobal.com › blog › {slug || 'article'}</div>
+                    <div className="serp-breadcrumb">{import.meta.env.VITE_SITE_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://yanfglobal.com')} › blog › {slug || 'article'}</div>
                   </div>
                 </div>
 

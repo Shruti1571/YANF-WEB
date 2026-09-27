@@ -45,7 +45,7 @@ export default function ArticlePreviewInspector({
             {metaTitle || title || 'Article Title — YANF'}
           </div>
           <div style={{ fontSize: '13px', color: '#006621', marginBottom: '4px' }}>
-            https://yanfglobal.com/blogs/{slug || 'article-slug'}
+            {(import.meta.env.VITE_SITE_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://yanfglobal.com'))}/#page-blogs/{slug || 'article-slug'}
           </div>
           <div style={{ fontSize: '13px', color: '#545454', lineHeight: '1.4', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
             {metaDescription || summary || 'Google search snippet description preview...'}

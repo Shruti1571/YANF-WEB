@@ -7,6 +7,7 @@ import BlogWritingStudio from '../BlogWritingStudio';
 import MediaLibraryStudio from '../MediaLibraryStudio';
 import UserManagementStudio from '../UserManagementStudio';
 import GlobalSettingsStudio from '../GlobalSettingsStudio';
+import CertificateStudio from '../CertificateStudio';
 
 export default function AdminDashboardLayout({ state }) {
   const {
@@ -97,6 +98,10 @@ export default function AdminDashboardLayout({ state }) {
               handleUploadCover={handleUploadCover}
               currentUser={currentUser}
             />
+          )}
+
+          {currentTab === 'certificates' && (
+            <CertificateStudio currentUser={currentUser} token={state.token} />
           )}
 
           {currentTab === 'users' && (

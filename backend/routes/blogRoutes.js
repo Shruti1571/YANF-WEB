@@ -65,6 +65,11 @@ router.get('/:slug', async (req, res) => {
   }
 });
 
+const normalizeProse = (str) => {
+  if (!str || typeof str !== 'string') return str;
+  return str.replace(/&nbsp;/gi, ' ').replace(/\u00A0/g, ' ').replace(/&#160;/g, ' ');
+};
+
 // POST /api/blogs — Create new blog post (Protected Admin)
 router.post('/', authAdmin, async (req, res) => {
   try {
@@ -103,13 +108,13 @@ router.post('/', authAdmin, async (req, res) => {
       title,
       slug: generatedSlug,
       metaTitle: metaTitle || title,
-      metaDescription: metaDescription || summary,
+      metaDescription: metaDescription || normalizeProse(summary),
       metaKeywords,
       category: category || 'Diplomacy',
       author: author || 'YANF Editorial',
       readTime: readTime || '4 min read',
-      summary,
-      content,
+      summary: normalizeProse(summary),
+      content: normalizeProse(content),
       coverImage,
       status: status || 'published'
     });
@@ -159,13 +164,13 @@ router.put('/:id', authAdmin, async (req, res) => {
 
     if (title !== undefined) blog.title = title;
     if (metaTitle !== undefined) blog.metaTitle = metaTitle;
-    if (metaDescription !== undefined) blog.metaDescription = metaDescription;
+    if (metaDescription !== undefined) blog.metaDescription = normalizeProse(metaDescription);
     if (metaKeywords !== undefined) blog.metaKeywords = metaKeywords;
     if (category !== undefined) blog.category = category;
     if (author !== undefined) blog.author = author;
     if (readTime !== undefined) blog.readTime = readTime;
-    if (summary !== undefined) blog.summary = summary;
-    if (content !== undefined) blog.content = content;
+    if (summary !== undefined) blog.summary = normalizeProse(summary);
+    if (content !== undefined) blog.content = normalizeProse(content);
     if (coverImage !== undefined) blog.coverImage = coverImage;
     if (status !== undefined) blog.status = status;
     blog.updatedAt = new Date();

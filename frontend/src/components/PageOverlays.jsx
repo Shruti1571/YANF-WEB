@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import UnderConstruction from './UnderConstruction';
 import AdminPanel from './AdminPanel';
 import PublicBlogPage from './PublicBlogPage';
+import PublicCertificateVerification from './PublicCertificateVerification';
 
 export default function PageOverlays({ activePage, onClose, onNavigate }) {
   const pageRefs = useRef({});
@@ -456,26 +457,14 @@ export default function PageOverlays({ activePage, onClose, onNavigate }) {
       </div>
 
       {/* CERTIFICATES PAGE (UNDER CONSTRUCTION) */}
+      {/* CERTIFICATES VERIFICATION PAGE */}
       <div
         className={`page ${activePage === 'page-certificates' ? 'open' : ''}`}
         id="page-certificates"
         ref={setPageRef('page-certificates')}
       >
-        <button className="back" type="button" onClick={onClose}>✕ Close</button>
         {activePage === 'page-certificates' && (
-          <UnderConstruction
-            kicker="More · Certificates"
-            title="Digital Credential & Certificate Verifier"
-            badge="Under Construction • Launching Soon"
-            description="Our tamper-proof digital certification portal is currently undergoing final verification and testing. Delegates, schools, and adjudicators will soon be able to instantly verify and download official YANF certificates of achievement and participation."
-            bgMedia="yanf-wall.svg"
-            onNavigate={onNavigate}
-            features={[
-              { tag: "VERIFICATION 01", heading: "Instant ID Verification", text: "Verify delegate credentials and awards using unique Certificate Hash IDs." },
-              { tag: "VERIFICATION 02", heading: "High-Res PDF Download", text: "Download official signed certificates suitable for university applications." },
-              { tag: "VERIFICATION 03", heading: "LinkedIn Credential Badges", text: "Directly export verified credentials to LinkedIn profiles." }
-            ]}
-          />
+          <PublicCertificateVerification onClose={onClose} />
         )}
       </div>
 

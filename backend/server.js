@@ -7,11 +7,26 @@ const seedAdmin = require('./config/seedAdmin');
 const authRoutes = require('./routes/authRoutes');
 const blogRoutes = require('./routes/blogRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
+const eventRoutes = require('./routes/eventRoutes');
+const certificateRoutes = require('./routes/certificateRoutes');
 
 const app = express();
 
 // Middleware
-app.use(cors());
+const allowedOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(',').map(origin => origin.trim()).filter(Boolean)
+  : ['http://localhost:5173', 'http://localhost:3000', 'https://yanfglobal.com'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
@@ -30,6 +45,8 @@ app.use(async (req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/certificates', certificateRoutes);
 
 // Health check endpoint
 app.get('/', (req, res) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { fetchPublishedBlogs, fetchBlogBySlug } from '../services/api';
 import UnderConstruction from './UnderConstruction';
 
@@ -10,6 +10,8 @@ export default function PublicBlogPage({ onNavigate }) {
   const [categoryFilter, setCategoryFilter] = useState('All');
   const [copiedLink, setCopiedLink] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [fontSizeMultiplier, setFontSizeMultiplier] = useState(1); // 0.9, 1, 1.15
+  const [activeHeadingId, setActiveHeadingId] = useState('');
   const readerTopRef = useRef(null);
 
   // Extract slug from URL hash (e.g. #page-blogs/test-article or #blog/test-article)
@@ -62,7 +64,7 @@ export default function PublicBlogPage({ onNavigate }) {
     return () => window.removeEventListener('hashchange', onHashChange);
   }, [blogs]);
 
-  // Scroll listener for reading progress bar
+  // Scroll listener for reading progress bar and active TOC heading
   useEffect(() => {
     const handleScroll = () => {
       const pageEl = document.getElementById('page-blogs');
@@ -71,6 +73,20 @@ export default function PublicBlogPage({ onNavigate }) {
         if (totalScroll > 0) {
           const current = (pageEl.scrollTop / totalScroll) * 100;
           setScrollProgress(Math.min(100, Math.max(0, current)));
+        }
+
+        // Active heading detection
+        const headingEls = pageEl.querySelectorAll('.editorial-body-content h1, .editorial-body-content h2, .editorial-body-content h3');
+        const containerTop = pageEl.getBoundingClientRect().top;
+        let currentActiveId = '';
+        headingEls.forEach(el => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top - containerTop <= 180) {
+            currentActiveId = el.id;
+          }
+        });
+        if (currentActiveId) {
+          setActiveHeadingId(currentActiveId);
         }
       }
     };
@@ -131,34 +147,61 @@ export default function PublicBlogPage({ onNavigate }) {
 
   const handleShareTwitter = (blog) => {
     const text = encodeURIComponent(`Read "${blog.title}" on the YANF Diplomatic Journal:`);
-    const url = encodeURIComponent(`https://yanfglobal.com/blog/${blog.slug || ''}`);
+    const url = encodeURIComponent(`${window.location.origin}/#page-blogs/${blog.slug || ''}`);
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
   };
 
   const handleShareLinkedIn = (blog) => {
-    const url = encodeURIComponent(`https://yanfglobal.com/blog/${blog.slug || ''}`);
+    const url = encodeURIComponent(`${window.location.origin}/#page-blogs/${blog.slug || ''}`);
     window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank');
   };
 
   const handleShareWhatsApp = (blog) => {
-    const text = encodeURIComponent(`*${blog.title}* - Read on YANF: https://yanfglobal.com/blog/${blog.slug || ''}`);
+    const text = encodeURIComponent(`*${blog.title}* - Read on YANF: ${window.location.origin}/#page-blogs/${blog.slug || ''}`);
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
 
-  // Helper to extract headings from content for Table of Contents
-  const extractHeadings = (htmlContent) => {
-    if (!htmlContent) return [];
-    const div = document.createElement('div');
-    div.innerHTML = htmlContent;
-    const nodes = div.querySelectorAll('h1, h2, h3');
-    const list = [];
-    nodes.forEach((node, i) => {
+  // Helper to inject ID anchors into HTML content for Table of Contents & normalize spaces
+  const processedContent = useMemo(() => {
+    if (!selectedBlog?.content) return { html: '', headings: [] };
+    // Normalize non-breaking spaces (&nbsp;, \u00A0) into normal wrap-friendly spaces
+    const normalizedHtml = (selectedBlog.content || '')
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/\u00A0/g, ' ')
+      .replace(/&#160;/g, ' ');
+
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(normalizedHtml, 'text/html');
+    const nodes = doc.querySelectorAll('h1, h2, h3');
+    const headings = [];
+
+    nodes.forEach((node, idx) => {
       const text = node.textContent.trim();
       if (text) {
-        list.push({ id: `heading-${i}`, text: text, level: node.tagName.toLowerCase() });
+        const id = `toc-heading-${idx}`;
+        node.setAttribute('id', id);
+        headings.push({
+          id,
+          text,
+          level: node.tagName.toLowerCase()
+        });
       }
     });
-    return list;
+
+    return {
+      html: doc.body.innerHTML,
+      headings
+    };
+  }, [selectedBlog?.content]);
+
+  const scrollToHeading = (id) => {
+    const pageEl = document.getElementById('page-blogs');
+    const targetEl = document.getElementById(id);
+    if (pageEl && targetEl) {
+      const targetOffset = targetEl.offsetTop - 120;
+      pageEl.scrollTo({ top: targetOffset, behavior: 'smooth' });
+      setActiveHeadingId(id);
+    }
   };
 
   // Loading State
@@ -198,345 +241,418 @@ export default function PublicBlogPage({ onNavigate }) {
     );
   }
 
-  // ==========================================
-  // 📖 LUXURY ARTICLE READER EXPERIENCE (3-COLUMN WIDESCREEN)
-  // ==========================================
+  // =========================================================================
+  // 📖 REDESIGNED WORLD-CLASS EDITORIAL ARTICLE EXPERIENCE
+  // =========================================================================
   if (selectedBlog) {
     const nextArticles = blogs.filter(b => b._id !== selectedBlog._id).slice(0, 3);
-    const headings = extractHeadings(selectedBlog.content);
+    const { html, headings } = processedContent;
 
     return (
       <div className="editorial-page-wrapper" ref={readerTopRef}>
         
-        {/* READING PROGRESS BAR (FIXED AT TOP) */}
-        <div 
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            height: '3px',
-            width: `${scrollProgress}%`,
-            background: 'linear-gradient(90deg, #2563eb, #8fd0ff, #fbbf24)',
-            zIndex: 9999,
-            transition: 'width 0.1s ease',
-            boxShadow: '0 0 12px rgba(143, 208, 255, 0.9)'
-          }} 
-        />
-
-        {/* LUXURY AMBIENT BACKGROUND */}
-        <div className="editorial-ambient-bg" />
-
-        <div className="editorial-widescreen-container">
-          
-          {/* ================= LEFT SIDEBAR (STICKY CONTROLS & TOC) ================= */}
-          <aside className="editorial-sidebar-left">
-            
-            {/* BACK BUTTON */}
+        {/* 1. TOP STICKY READING PROGRESS & NAVIGATION BAR */}
+        <nav className="editorial-sticky-nav">
+          <div className="editorial-sticky-nav-inner">
             <button
               type="button"
               onClick={handleBackToFeed}
-              className="editorial-back-btn"
-              style={{ width: '100%', justifyContent: 'center', marginBottom: '24px' }}
+              className="editorial-nav-back-link"
             >
-              <span>←</span> All Dispatches
+              <span>←</span> Dispatches Feed
             </button>
 
-            {/* READING METRICS CARD */}
-            <div className="editorial-sidebar-card">
-              <div style={{ fontSize: '11px', color: 'var(--ink-dim)', fontFamily: 'var(--mono)', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '10px' }}>
-                Reading Progress
-              </div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '8px' }}>
-                <span style={{ fontSize: '24px', fontWeight: '800', color: 'var(--ice)', fontFamily: 'var(--display)' }}>
-                  {Math.round(scrollProgress)}%
-                </span>
-                <span style={{ fontSize: '12px', color: 'var(--ink-dim)' }}>completed</span>
-              </div>
-              <div style={{ height: '4px', background: 'rgba(238, 244, 248, 0.08)', borderRadius: '2px', overflow: 'hidden', marginBottom: '12px' }}>
-                <div style={{ height: '100%', width: `${scrollProgress}%`, background: 'var(--ice)', transition: 'width 0.15s ease' }} />
-              </div>
-              <div style={{ fontSize: '12px', color: 'var(--ink-dim)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span>⏱️</span> {selectedBlog.readTime || '4 min read'}
-              </div>
+            <div className="editorial-nav-center-title">
+              <span className="editorial-nav-category">{selectedBlog.category || 'Diplomacy'}</span>
+              <span className="editorial-nav-bullet">•</span>
+              <span className="editorial-nav-article-name">{selectedBlog.title}</span>
             </div>
 
-            {/* QUICK SOCIAL SHARE BAR */}
-            <div className="editorial-sidebar-card">
-              <div style={{ fontSize: '11px', color: 'var(--ink-dim)', fontFamily: 'var(--mono)', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '12px' }}>
-                Share Article
+            <div className="editorial-nav-actions">
+              <button
+                type="button"
+                onClick={() => handleCopyShareLink(selectedBlog.slug)}
+                className="editorial-nav-action-btn"
+                title="Copy Article Permalink"
+              >
+                {copiedLink ? '✓ Copied' : '🔗 Share'}
+              </button>
+            </div>
+          </div>
+
+          {/* PROGRESS LINE */}
+          <div className="editorial-nav-progress-track">
+            <div 
+              className="editorial-nav-progress-bar"
+              style={{ width: `${scrollProgress}%` }}
+            />
+          </div>
+        </nav>
+
+        {/* 2. ATMOSPHERIC AMBIENT GLOW BACKDROP */}
+        <div className="editorial-ambient-bg" />
+
+        {/* 3. MAIN CINEMATIC ARTICLE WRAPPER */}
+        <div className="editorial-reader-container">
+          
+          {/* A. HERO SECTION */}
+          <header className="editorial-hero-header">
+            
+            <div className="editorial-hero-meta-top">
+              <span className="editorial-radiant-badge">
+                <span className="radiant-dot" />
+                {selectedBlog.category || 'Diplomacy & Strategy'}
+              </span>
+              <span className="editorial-meta-divider">•</span>
+              <span className="editorial-read-time-pill">
+                ⏱️ {selectedBlog.readTime || '4 min read'}
+              </span>
+              <span className="editorial-meta-divider">•</span>
+              <span className="editorial-verified-badge">
+                🛡️ Verified Diplomatic Brief
+              </span>
+            </div>
+
+            <h1 className="editorial-hero-title">
+              {selectedBlog.title}
+            </h1>
+
+            {selectedBlog.summary && (
+              <p className="editorial-hero-lead">
+                {selectedBlog.summary}
+              </p>
+            )}
+
+            {/* AUTHOR BYLINE STRIP */}
+            <div className="editorial-hero-byline-strip">
+              <div className="editorial-hero-author-group">
+                <div className="editorial-hero-avatar">
+                  {selectedBlog.author ? selectedBlog.author[0].toUpperCase() : 'Y'}
+                </div>
+                <div>
+                  <div className="editorial-hero-author-name">
+                    {selectedBlog.author || 'YANF Editorial Board'}
+                  </div>
+                  <div className="editorial-hero-author-role">
+                    Diplomatic Correspondent &bull; Published {new Date(selectedBlog.createdAt || Date.now()).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}
+                  </div>
+                </div>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+
+              {/* QUICK SOCIAL SHARE BAR */}
+              <div className="editorial-hero-share-group">
                 <button
                   type="button"
                   onClick={() => handleCopyShareLink(selectedBlog.slug)}
-                  className="editorial-share-icon-btn"
-                  style={{ width: '100%', justifyContent: 'flex-start', display: 'flex', alignItems: 'center', gap: '8px' }}
+                  className="editorial-hero-share-btn"
+                  title="Copy Link"
                 >
-                  <span>🔗</span> {copiedLink ? '✓ Link Copied' : 'Copy Permalink'}
+                  {copiedLink ? '✓ Copied' : '🔗 Copy'}
                 </button>
                 <button
                   type="button"
                   onClick={() => handleShareWhatsApp(selectedBlog)}
-                  className="editorial-share-icon-btn"
-                  style={{ width: '100%', justifyContent: 'flex-start', display: 'flex', alignItems: 'center', gap: '8px' }}
+                  className="editorial-hero-share-btn whatsapp"
+                  title="Share to WhatsApp"
                 >
-                  <span>💬</span> WhatsApp
+                  WhatsApp
                 </button>
                 <button
                   type="button"
                   onClick={() => handleShareTwitter(selectedBlog)}
-                  className="editorial-share-icon-btn"
-                  style={{ width: '100%', justifyContent: 'flex-start', display: 'flex', alignItems: 'center', gap: '8px' }}
+                  className="editorial-hero-share-btn twitter"
+                  title="Share to X (Twitter)"
                 >
-                  <span>𝕏</span> Share on X
+                  𝕏 Post
                 </button>
                 <button
                   type="button"
                   onClick={() => handleShareLinkedIn(selectedBlog)}
-                  className="editorial-share-icon-btn"
-                  style={{ width: '100%', justifyContent: 'flex-start', display: 'flex', alignItems: 'center', gap: '8px' }}
+                  className="editorial-hero-share-btn linkedin"
+                  title="Share to LinkedIn"
                 >
-                  <span>💼</span> LinkedIn
+                  LinkedIn
                 </button>
               </div>
             </div>
 
-            {/* TOPICS / TAGS */}
-            {selectedBlog.metaKeywords && (
-              <div className="editorial-sidebar-card">
-                <div style={{ fontSize: '11px', color: 'var(--ink-dim)', fontFamily: 'var(--mono)', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '10px' }}>
-                  Topics
-                </div>
-                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                  {selectedBlog.metaKeywords.split(',').map((tag, idx) => (
-                    <span key={idx} className="editorial-topic-tag" style={{ fontSize: '11px', padding: '3px 10px' }}>
-                      #{tag.trim()}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-
-          </aside>
-
-          {/* ================= CENTER COLUMN (MAIN EDITORIAL CANVAS) ================= */}
-          <main className="editorial-main-content">
-            
-            <article className="editorial-article-card">
-              
-              {/* ARTICLE HERO HEADER */}
-              <header style={{ marginBottom: '32px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px', flexWrap: 'wrap' }}>
-                  <span className="editorial-category-badge">
-                    {selectedBlog.category || 'Diplomacy'}
-                  </span>
-                  <span style={{ color: 'var(--line)', fontSize: '14px' }}>•</span>
-                  <span style={{ fontSize: '12.5px', color: 'var(--ice)', fontFamily: 'var(--mono)', letterSpacing: '0.08em' }}>
-                    ⏱️ {selectedBlog.readTime || '4 min read'}
-                  </span>
-                </div>
-
-                <h1 className="editorial-article-headline">
-                  {selectedBlog.title}
-                </h1>
-
-                {selectedBlog.summary && (
-                  <p className="editorial-article-lead">
-                    {selectedBlog.summary}
-                  </p>
-                )}
-
-                {/* AUTHOR & DATE BYLINE BAR */}
-                <div className="editorial-byline-bar">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                    <div className="editorial-author-avatar">
-                      {selectedBlog.author ? selectedBlog.author[0].toUpperCase() : 'Y'}
-                    </div>
-                    <div>
-                      <div style={{ fontWeight: '600', color: '#ffffff', fontSize: '15px', letterSpacing: '-0.01em' }}>
-                        {selectedBlog.author || 'YANF Editorial Board'}
-                      </div>
-                      <div style={{ fontSize: '12px', color: 'var(--ink-dim)', fontFamily: 'var(--mono)', marginTop: '2px' }}>
-                        Published {new Date(selectedBlog.createdAt || Date.now()).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}
-                      </div>
-                    </div>
-                  </div>
-
-                  <span className="editorial-verified-pill">
-                    ✓ Verified Dispatch
-                  </span>
-                </div>
-              </header>
-
-              {/* FEATURED COVER IMAGE */}
-              {selectedBlog.coverImage?.url && (
-                <figure className="editorial-cover-container">
+            {/* FEATURED HERO COVER IMAGE */}
+            {selectedBlog.coverImage?.url && (
+              <figure className="editorial-hero-media-card">
+                <div className="editorial-media-wrapper">
                   <img 
                     src={selectedBlog.coverImage.url} 
                     alt={selectedBlog.coverImage.altText || selectedBlog.title}
-                    className="editorial-cover-img"
+                    className="editorial-media-img"
                   />
-                  {selectedBlog.coverImage.altText && (
-                    <figcaption className="editorial-cover-caption">
-                      📷 {selectedBlog.coverImage.altText}
-                    </figcaption>
-                  )}
-                </figure>
-              )}
-
-              {/* RICH ARTICLE BODY CONTENT */}
-              <div 
-                className="editorial-body-content"
-                dangerouslySetInnerHTML={{ __html: selectedBlog.content || '' }}
-              />
-
-              {/* AUTHOR BIO CARD */}
-              <div className="editorial-author-bio-card">
-                <div className="editorial-author-avatar" style={{ width: '52px', height: '52px', fontSize: '20px' }}>
-                  {selectedBlog.author ? selectedBlog.author[0].toUpperCase() : 'Y'}
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                    <h4 style={{ margin: 0, color: '#ffffff', fontSize: '16px', fontWeight: '700' }}>
-                      {selectedBlog.author || 'YANF Editorial Board'}
-                    </h4>
-                    <span style={{ fontSize: '11px', color: 'var(--gold)', fontFamily: 'var(--mono)', border: '1px solid rgba(200, 160, 80, 0.4)', padding: '1px 7px', borderRadius: '10px' }}>
-                      Author
-                    </span>
-                  </div>
-                  <p style={{ margin: 0, fontSize: '13px', color: 'var(--ink-dim)', lineHeight: '1.6' }}>
-                    Diplomatic policy analysis, debate methodology, and MUN briefing research published for the Youth As Nations' Front global delegation network.
-                  </p>
-                </div>
-              </div>
-
-            </article>
-
-            {/* BOTTOM CALL TO ACTION */}
-            <div className="cta-band" style={{ marginTop: '48px', borderLeft: '3px solid var(--ice)', background: 'rgba(8, 17, 26, 0.85)', borderRadius: '20px', padding: '36px 32px' }}>
-              <div>
-                <h3 style={{ color: '#ffffff', margin: '0 0 8px 0', fontSize: '20px', fontWeight: '700' }}>
-                  Join the Diplomatic Assembly
-                </h3>
-                <p style={{ color: 'var(--ink-dim)', margin: 0, fontSize: '14px', maxWidth: '500px', lineHeight: '1.6' }}>
-                  Receive full committee briefing packs, policy motions, and delegate invitations directly in your inbox.
-                </p>
-              </div>
-              <div className="cta-row" style={{ marginTop: '12px' }}>
-                <a className="btn solid" href="#page-contact" onClick={(e) => { e.preventDefault(); onNavigate('page-contact'); }}>
-                  Write to Us
-                </a>
-                <button 
-                  type="button" 
-                  className="btn" 
-                  onClick={handleBackToFeed}
-                  style={{ cursor: 'pointer', background: 'transparent' }}
-                >
-                  All Articles
-                </button>
-              </div>
-            </div>
-
-          </main>
-
-          {/* ================= RIGHT SIDEBAR (CORRESPONDENT & MORE DISPATCHES) ================= */}
-          <aside className="editorial-sidebar-right">
-            
-            {/* CORRESPONDENT BADGE */}
-            <div className="editorial-sidebar-card" style={{ textAlign: 'center', padding: '24px 20px' }}>
-              <div className="editorial-author-avatar" style={{ margin: '0 auto 12px auto', width: '52px', height: '52px', fontSize: '18px' }}>
-                {selectedBlog.author ? selectedBlog.author[0].toUpperCase() : 'Y'}
-              </div>
-              <h4 style={{ color: '#ffffff', fontSize: '15px', margin: '0 0 4px 0', fontWeight: '700' }}>
-                {selectedBlog.author || 'YANF Editorial'}
-              </h4>
-              <p style={{ color: 'var(--ice)', fontSize: '11.5px', fontFamily: 'var(--mono)', margin: '0 0 14px 0' }}>
-                Diplomatic Correspondent
-              </p>
-              <a 
-                href="#page-contact" 
-                onClick={(e) => { e.preventDefault(); onNavigate('page-contact'); }}
-                className="btn"
-                style={{ fontSize: '11px', padding: '7px 14px', width: '100%', justifyContent: 'center', display: 'inline-flex' }}
-              >
-                Contact Desk
-              </a>
-            </div>
-
-            {/* MORE IN CATEGORY */}
-            {nextArticles.length > 0 && (
-              <div className="editorial-sidebar-card">
-                <div style={{ fontSize: '11px', color: 'var(--ink-dim)', fontFamily: 'var(--mono)', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '14px' }}>
-                  Related Dispatches
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                  {nextArticles.map((item) => (
-                    <div 
-                      key={item._id}
-                      onClick={() => handleSelectArticle(item)}
-                      style={{
-                        padding: '12px',
-                        background: 'rgba(6, 13, 20, 0.6)',
-                        border: '1px solid var(--line)',
-                        borderRadius: '12px',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease'
-                      }}
-                      onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--ice)'; e.currentTarget.style.transform = 'translateX(2px)'; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--line)'; e.currentTarget.style.transform = 'none'; }}
-                    >
-                      {item.coverImage?.url && (
-                        <div style={{ height: '90px', borderRadius: '8px', overflow: 'hidden', marginBottom: '8px', background: '#02060b' }}>
-                          <img src={item.coverImage.url} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                        </div>
-                      )}
-                      <div style={{ fontSize: '10.5px', color: 'var(--ice)', fontFamily: 'var(--mono)', textTransform: 'uppercase', marginBottom: '4px' }}>
-                        {item.category || 'Article'} • {item.readTime || '3 min'}
-                      </div>
-                      <h5 style={{ color: '#ffffff', fontSize: '13px', margin: '0 0 4px 0', lineHeight: '1.35', fontWeight: '600' }}>
-                        {item.title}
-                      </h5>
-                      <span style={{ fontSize: '11px', color: 'var(--ice)', fontFamily: 'var(--mono)' }}>
-                        Read Brief →
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                {selectedBlog.coverImage.altText && (
+                  <figcaption className="editorial-media-caption">
+                    <span className="caption-icon">📷</span>
+                    <span>{selectedBlog.coverImage.altText}</span>
+                  </figcaption>
+                )}
+              </figure>
             )}
 
-            {/* YANF FORUM WIDGET */}
-            <div className="editorial-sidebar-card" style={{ background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(143, 208, 255, 0.05))', border: '1px solid rgba(143, 208, 255, 0.25)' }}>
-              <div style={{ fontSize: '11px', color: 'var(--gold)', fontFamily: 'var(--mono)', textTransform: 'uppercase', letterSpacing: '0.14em', marginBottom: '6px' }}>
-                YANF Simulation Hub
-              </div>
-              <h4 style={{ color: '#ffffff', fontSize: '14px', margin: '0 0 6px 0', fontWeight: '700' }}>
-                Next-Gen Diplomacy
-              </h4>
-              <p style={{ fontSize: '12px', color: 'var(--ink-dim)', margin: '0 0 12px 0', lineHeight: '1.5' }}>
-                Register for upcoming MUN assemblies, debate masterclasses, and position paper workshops.
-              </p>
-              <a
-                href="#page-contact"
-                onClick={(e) => { e.preventDefault(); onNavigate('page-contact'); }}
-                className="btn solid"
-                style={{ fontSize: '11px', padding: '8px 14px', width: '100%', justifyContent: 'center', display: 'inline-flex' }}
-              >
-                Register as Delegate
-              </a>
-            </div>
+          </header>
 
-          </aside>
+          {/* B. MAIN TWO-COLUMN READING ECOSYSTEM */}
+          <div className="editorial-content-layout">
+            
+            {/* LEFT FLOATING READING COMPANION (STICKY) */}
+            <aside className="editorial-companion-sidebar">
+              
+              {/* READING PROGRESS CARD */}
+              <div className="companion-glass-card">
+                <div className="companion-card-label">Reading Progress</div>
+                <div className="companion-progress-readout">
+                  <div className="progress-circular-indicator">
+                    <svg viewBox="0 0 36 36" className="circular-chart">
+                      <path className="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      <path 
+                        className="circle" 
+                        strokeDasharray={`${Math.round(scrollProgress)}, 100`} 
+                        d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" 
+                      />
+                    </svg>
+                    <span className="progress-percent-text">{Math.round(scrollProgress)}%</span>
+                  </div>
+                  <div>
+                    <div className="progress-time-text">{selectedBlog.readTime || '4 min read'}</div>
+                    <div className="progress-sub-text">Estimated time</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* TABLE OF CONTENTS (IF HEADINGS EXIST) */}
+              {headings.length > 0 && (
+                <div className="companion-glass-card">
+                  <div className="companion-card-label">Contents Outline</div>
+                  <nav className="companion-toc-nav">
+                    {headings.map((h) => (
+                      <button
+                        key={h.id}
+                        type="button"
+                        onClick={() => scrollToHeading(h.id)}
+                        className={`companion-toc-link ${h.level} ${activeHeadingId === h.id ? 'active' : ''}`}
+                      >
+                        <span className="toc-bullet">&rsaquo;</span>
+                        <span className="toc-text">{h.text}</span>
+                      </button>
+                    ))}
+                  </nav>
+                </div>
+              )}
+
+              {/* FONT SIZE & READING COMFORT TOOLS */}
+              <div className="companion-glass-card">
+                <div className="companion-card-label">Typography Scale</div>
+                <div className="companion-font-buttons">
+                  <button
+                    type="button"
+                    onClick={() => setFontSizeMultiplier(0.92)}
+                    className={`font-scale-btn ${fontSizeMultiplier === 0.92 ? 'active' : ''}`}
+                    title="Compact Font Size"
+                  >
+                    A-
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFontSizeMultiplier(1)}
+                    className={`font-scale-btn ${fontSizeMultiplier === 1 ? 'active' : ''}`}
+                    title="Default Font Size"
+                  >
+                    A
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFontSizeMultiplier(1.14)}
+                    className={`font-scale-btn ${fontSizeMultiplier === 1.14 ? 'active' : ''}`}
+                    title="Large Comfortable Font Size"
+                  >
+                    A+
+                  </button>
+                </div>
+              </div>
+
+              {/* TOPICS / TAGS */}
+              {selectedBlog.metaKeywords && (
+                <div className="companion-glass-card">
+                  <div className="companion-card-label">Indexed Topics</div>
+                  <div className="companion-tags-wrap">
+                    {selectedBlog.metaKeywords.split(',').map((tag, idx) => (
+                      <span key={idx} className="companion-tag-chip">
+                        #{tag.trim()}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+            </aside>
+
+            {/* MAIN EDITORIAL READING CANVAS */}
+            <main className="editorial-main-canvas">
+              
+              <article className="editorial-reading-glass-canvas">
+                
+                {/* EXECUTIVE BRIEFING SUMMARY CALLOUT */}
+                {selectedBlog.summary && (
+                  <div className="editorial-executive-briefing-box">
+                    <div className="briefing-box-header">
+                      <span className="briefing-icon">🏛️</span>
+                      <span className="briefing-title">Executive Briefing & Key Premise</span>
+                    </div>
+                    <p className="briefing-content">
+                      {selectedBlog.summary}
+                    </p>
+                  </div>
+                )}
+
+                {/* RICH ARTICLE BODY */}
+                <div 
+                  className="editorial-body-content"
+                  style={{ 
+                    fontSize: `${1.12 * fontSizeMultiplier}rem`,
+                    wordBreak: 'normal',
+                    overflowWrap: 'normal',
+                    wordWrap: 'normal',
+                    whiteSpace: 'normal',
+                    hyphens: 'none',
+                    WebkitHyphens: 'none'
+                  }}
+                  dangerouslySetInnerHTML={{ __html: html || '' }}
+                />
+
+                {/* ARTICLE END DECORATIVE DIVIDER */}
+                <div className="editorial-end-marker">
+                  <span className="marker-line" />
+                  <span className="marker-symbol">✦ &nbsp; ✦ &nbsp; ✦</span>
+                  <span className="marker-line" />
+                </div>
+
+                {/* AUTHOR SPOTLIGHT BIO CARD */}
+                <div className="editorial-author-spotlight-card">
+                  <div className="spotlight-avatar">
+                    {selectedBlog.author ? selectedBlog.author[0].toUpperCase() : 'Y'}
+                  </div>
+                  <div className="spotlight-details">
+                    <div className="spotlight-header">
+                      <h4 className="spotlight-name">{selectedBlog.author || 'YANF Editorial Board'}</h4>
+                      <span className="spotlight-badge">Diplomatic Correspondent</span>
+                    </div>
+                    <p className="spotlight-bio">
+                      Authoritative research, geopolitical debate motions, and Model UN committee briefings curated for next-generation negotiators across the Youth As Nations' Front global network.
+                    </p>
+                    <div className="spotlight-actions">
+                      <a 
+                        href="#page-contact" 
+                        onClick={(e) => { e.preventDefault(); onNavigate('page-contact'); }}
+                        className="spotlight-contact-btn"
+                      >
+                        Contact Author Desk &rarr;
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+              </article>
+
+              {/* C. NEXT DISPATCHES / RELATED PUBLICATIONS */}
+              {nextArticles.length > 0 && (
+                <section className="editorial-recommendations-section">
+                  <div className="recommendations-header">
+                    <span className="recommendations-kicker">Continued Reading</span>
+                    <h3 className="recommendations-title">More from the Diplomatic Journal</h3>
+                  </div>
+
+                  <div className="editorial-recommendations-grid">
+                    {nextArticles.map((nextBlog) => (
+                      <div
+                        key={nextBlog._id}
+                        onClick={() => handleSelectArticle(nextBlog)}
+                        className="recommendation-card"
+                      >
+                        {nextBlog.coverImage?.url && (
+                          <div className="recommendation-img-wrap">
+                            <img 
+                              src={nextBlog.coverImage.url} 
+                              alt={nextBlog.title} 
+                              className="recommendation-img"
+                            />
+                            <span className="recommendation-category-pill">
+                              {nextBlog.category || 'Diplomacy'}
+                            </span>
+                          </div>
+                        )}
+                        <div className="recommendation-card-body">
+                          <div className="recommendation-meta-row">
+                            <span>⏱️ {nextBlog.readTime || '3 min'}</span>
+                            <span>&bull;</span>
+                            <span>{new Date(nextBlog.createdAt || Date.now()).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}</span>
+                          </div>
+                          <h4 className="recommendation-card-title">
+                            {nextBlog.title}
+                          </h4>
+                          <p className="recommendation-card-excerpt">
+                            {nextBlog.summary}
+                          </p>
+                          <div className="recommendation-card-footer">
+                            <span className="author-name">{nextBlog.author || 'YANF'}</span>
+                            <span className="read-link">Read Dispatch &rarr;</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* D. DELEGATE INVITATION CTA BANNER */}
+              <div className="editorial-bottom-cta-banner">
+                <div className="cta-banner-content">
+                  <span className="cta-banner-tag">Youth As Nations' Front</span>
+                  <h3 className="cta-banner-heading">Take your seat at the diplomatic table.</h3>
+                  <p className="cta-banner-desc">
+                    Access committee briefing packs, participate in parliamentary debates, and hone negotiation strategy with international mentors.
+                  </p>
+                </div>
+                <div className="cta-banner-buttons">
+                  <a 
+                    className="btn solid" 
+                    href="#page-contact" 
+                    onClick={(e) => { e.preventDefault(); onNavigate('page-contact'); }}
+                  >
+                    Register as Delegate
+                  </a>
+                  <button 
+                    type="button" 
+                    className="btn" 
+                    onClick={handleBackToFeed}
+                    style={{ background: 'transparent' }}
+                  >
+                    View All Dispatches
+                  </button>
+                </div>
+              </div>
+
+            </main>
+
+          </div>
+
+          <footer className="editorial-footer-tagline">
+            YANF — Youth as Nations' Front &nbsp;|&nbsp; Where Potential Meets Purpose.
+          </footer>
 
         </div>
       </div>
     );
   }
 
-  // ==========================================
+  // =========================================================================
   // 📰 PUBLIC EDITORIAL FEED (FULL WIDESCREEN GRID)
-  // ==========================================
+  // =========================================================================
   const featuredArticle = filteredBlogs[0];
   const regularArticles = filteredBlogs.slice(1);
 

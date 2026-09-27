@@ -31,7 +31,7 @@ export default function App() {
     const handleHashChange = () => {
       const hash = window.location.hash;
       if (hash.startsWith('#page-')) {
-        const basePageId = hash.slice(1).split('/')[0];
+        const basePageId = hash.slice(1).split('/')[0].split('?')[0];
         setActivePage(basePageId);
         document.body.style.overflow = 'hidden';
       } else if (hash.startsWith('#blog/')) {

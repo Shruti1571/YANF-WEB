@@ -75,6 +75,17 @@ export default function AdminSidebar({ activeTab, setActiveTab, handleLogout, cu
           </button>
         )}
 
+        <button
+          type="button"
+          className={`nav-item ${activeTab === 'certificates' ? 'active' : ''}`}
+          onClick={() => setActiveTab('certificates')}
+        >
+          <span className="nav-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path><path d="M12 8l2 2 4-4"></path></svg>
+          </span>
+          <span className="nav-label">Certificates</span>
+        </button>
+
         {canAccessUsers && (
           <button
             type="button"
