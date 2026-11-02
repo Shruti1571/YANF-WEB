@@ -101,7 +101,7 @@ export function useAdminState() {
 
   // Sync meta title & description
   useEffect(() => {
-    if (title && !metaTitle) setMetaTitle(`${title} — YANF`);
+    if (title && !metaTitle) setMetaTitle(`${title} | YANF`);
     if (summary && !metaDescription) setMetaDescription(summary);
   }, [title, summary, metaTitle, metaDescription]);
 

@@ -294,7 +294,7 @@ nav#topnav {
   border-bottom: 1px solid rgba(238,244,248,0.07);
   font-weight: 300; line-height: 1.6; color: var(--ink-dim); font-size: 0.95rem; }
 .bullets li:last-child { border-bottom: none; }
-.bullets li::before { content: "—"; position: absolute; left: 0; color: var(--ice); }
+.bullets li::before { content: "•"; position: absolute; left: 0; color: var(--ice); }
 .bullets b { color: var(--ink); font-weight: 500; }
 .hl-table { width: 100%; max-width: 760px; border-collapse: collapse; border: 1px solid var(--line); }
 .hl-table th, .hl-table td { padding: 15px 20px; text-align: left;

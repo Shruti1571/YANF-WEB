@@ -9,6 +9,7 @@ export default function AdminSidebar({ activeTab, setActiveTab, handleLogout, cu
   const canAccessBlogs = isSuperAdmin || permissions.blogs !== false;
   const canAccessMedia = isSuperAdmin || permissions.media !== false;
   const canAccessUsers = isSuperAdmin || permissions.users === true;
+  const canAccessGallery = isSuperAdmin || permissions.gallery !== false;
 
   return (
     <aside className={`glass-sidebar ${isCollapsed ? 'collapsed' : ''}`}>
@@ -72,6 +73,19 @@ export default function AdminSidebar({ activeTab, setActiveTab, handleLogout, cu
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
             </span>
             <span className="nav-label">Media</span>
+          </button>
+        )}
+
+        {canAccessGallery && (
+          <button
+            type="button"
+            className={`nav-item ${activeTab === 'gallery' ? 'active' : ''}`}
+            onClick={() => setActiveTab('gallery')}
+          >
+            <span className="nav-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="1"></rect><line x1="2" y1="9" x2="22" y2="9"></line><line x1="2" y1="15" x2="22" y2="15"></line><line x1="9" y1="9" x2="9" y2="15"></line><line x1="15" y1="9" x2="15" y2="15"></line></svg>
+            </span>
+            <span className="nav-label">Gallery</span>
           </button>
         )}
 

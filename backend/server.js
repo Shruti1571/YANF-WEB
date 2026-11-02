@@ -9,6 +9,7 @@ const blogRoutes = require('./routes/blogRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const eventRoutes = require('./routes/eventRoutes');
 const certificateRoutes = require('./routes/certificateRoutes');
+const galleryRoutes = require('./routes/galleryRoutes');
 
 const app = express();
 
@@ -87,6 +88,9 @@ app.use('/events', eventRoutes);
 
 app.use('/api/certificates', certificateRoutes);
 app.use('/certificates', certificateRoutes);
+
+app.use('/api/gallery', galleryRoutes);
+app.use('/gallery', galleryRoutes);
 
 // Health check endpoint
 app.get('/', (req, res) => {

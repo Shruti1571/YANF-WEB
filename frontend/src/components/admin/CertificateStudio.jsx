@@ -576,22 +576,22 @@ export default function CertificateStudio({ currentUser, token }) {
                             onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.15)'}
                             onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
                           />
-                        ) : <span style={{ color: '#cbd5e1' }}>—</span>}
+                        ) : <span style={{ color: '#cbd5e1' }}>-</span>}
                       </td>
                       <td style={{ padding: '14px 16px', fontFamily: 'monospace', fontWeight: '700', color: '#3b82f6', letterSpacing: '0.5px' }}>
                         {cert.certificateNumber}
                       </td>
                       <td style={{ padding: '14px 16px', fontWeight: cert.recipientName ? '600' : 'normal', color: cert.recipientName ? '#0f172a' : '#94a3b8' }}>
-                        {cert.recipientName || '— (Blank)'}
+                        {cert.recipientName || '(Blank)'}
                       </td>
                       <td style={{ padding: '14px 16px', color: '#334155' }}>
-                        {cert.position || '—'}
+                        {cert.position || '-'}
                       </td>
                       <td style={{ padding: '14px 16px', color: '#334155' }}>
-                        {cert.portfolio || '—'}
+                        {cert.portfolio || '-'}
                       </td>
                       <td style={{ padding: '14px 16px', color: '#334155' }}>
-                        {cert.committee || '—'}
+                        {cert.committee || '-'}
                       </td>
                       <td style={{ padding: '14px 16px' }}>
                         <span style={{ 

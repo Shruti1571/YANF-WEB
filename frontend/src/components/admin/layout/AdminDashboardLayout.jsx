@@ -8,6 +8,7 @@ import MediaLibraryStudio from '../MediaLibraryStudio';
 import UserManagementStudio from '../UserManagementStudio';
 import GlobalSettingsStudio from '../GlobalSettingsStudio';
 import CertificateStudio from '../CertificateStudio';
+import GalleryStudio from '../GalleryStudio';
 
 export default function AdminDashboardLayout({ state }) {
   const {
@@ -98,6 +99,10 @@ export default function AdminDashboardLayout({ state }) {
               handleUploadCover={handleUploadCover}
               currentUser={currentUser}
             />
+          )}
+
+          {currentTab === 'gallery' && (
+            <GalleryStudio mediaGallery={mediaGallery} />
           )}
 
           {currentTab === 'certificates' && (

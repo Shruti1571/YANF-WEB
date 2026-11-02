@@ -327,761 +327,230 @@ export default function PublicCertificateVerification({ onClose }) {
   const hasTwoSchoolSigs = schoolSigs.length >= 2 && schoolSigs[1]?.name;
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      width: '100%',
-      background: '#090e17',
-      color: '#f8fafc',
-      fontFamily: "'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-      position: 'relative',
-      overflowX: 'hidden'
-    }}>
-
-      {/* TOP INSTITUTIONAL NAVIGATION BAR */}
-      <header style={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
-        backdropFilter: 'blur(16px)',
-        background: 'rgba(9, 14, 23, 0.85)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-        padding: '16px 32px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <img
-            src="/yanf-wall.svg"
-            alt="YANF Crest"
-            style={{ width: '40px', height: '40px', objectFit: 'contain' }}
-            onError={(e) => { e.currentTarget.style.display = 'none'; }}
-          />
+    <div className="cv">
+      {/* TOP BAR */}
+      <header className="cv-bar">
+        <div className="cv-bar-brand">
+          <span className="cv-plate">YANF</span>
           <div>
-            <div style={{ fontSize: '15px', fontWeight: '800', letterSpacing: '1px', color: '#ffffff', textTransform: 'uppercase' }}>
-              Youth As Nations' Front
-            </div>
-            <div style={{ fontSize: '12px', color: '#94a3b8', letterSpacing: '0.5px' }}>
-              Certificate Verification Portal
-            </div>
+            <div className="cv-bar-title">Youth As Nations' Front</div>
+            <div className="cv-bar-sub">Certificate Verification Portal</div>
           </div>
         </div>
-
-        <button
-          type="button"
-          onClick={onClose}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            background: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            color: '#e2e8f0',
-            padding: '10px 20px',
-            borderRadius: '9999px',
-            fontSize: '13px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)';
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-            e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
-          }}
-        >
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="19" y1="12" x2="5" y2="12"></line>
-            <polyline points="12 19 5 12 12 5"></polyline>
-          </svg>
-          Back to Portal
+        <button type="button" className="cv-tab-btn" onClick={onClose}>
+          <span aria-hidden="true">←</span> Back to Portal
         </button>
       </header>
 
-      {/* HERO SECTION */}
-      <section style={{
-        position: 'relative',
-        padding: '70px 24px 60px',
-        textAlign: 'center',
-        background: 'radial-gradient(circle at 50% -20%, #1e3a5f 0%, #0d1726 50%, #090e17 100%)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.06)'
-      }}>
-        {/* Ambient Light Orbs */}
-        <div style={{
-          position: 'absolute',
-          top: '20%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '700px',
-          height: '250px',
-          background: 'radial-gradient(ellipse, rgba(59, 130, 246, 0.18) 0%, transparent 70%)',
-          filter: 'blur(70px)',
-          pointerEvents: 'none'
-        }}></div>
+      {/* HERO + SEARCH */}
+      <section className="cv-wrap cv-hero">
+        <div className="cv-hero-copy">
+          <p className="cv-type cv-kicker">Records office · Official Verification</p>
+          <h1 className="cv-h1">Verify Your Certificate</h1>
+          <p className="cv-lede">Quickly check and download official certificates issued by YANF and partner institutions.</p>
+          <ul className="cv-badges">
+            <li>
+              <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /><polyline points="9 12 11 14 15 10" /></svg>
+              <span><b>100% Authentic</b>Directly matched with official YANF records</span>
+            </li>
+            <li>
+              <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21h18M5 21V10M19 21V10M9 21V10M15 21V10M2 10l10-6 10 6" /></svg>
+              <span><b>Officially Signed</b>Issued together with partner schools</span>
+            </li>
+            <li>
+              <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="11" width="16" height="10" rx="2" /><path d="M8 11V7a4 4 0 0 1 8 0v4" /></svg>
+              <span><b>Secure PDF Download</b>High-quality, print-ready certificate copy</span>
+            </li>
+          </ul>
+        </div>
 
-        <div style={{ position: 'relative', zIndex: 1, maxWidth: '820px', margin: '0 auto' }}>
-          {/* Badge */}
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '6px 18px',
-            borderRadius: '9999px',
-            background: 'rgba(59, 130, 246, 0.12)',
-            border: '1px solid rgba(59, 130, 246, 0.3)',
-            color: '#60a5fa',
-            fontSize: '12px',
-            fontWeight: '700',
-            letterSpacing: '1px',
-            textTransform: 'uppercase',
-            marginBottom: '20px'
-          }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#3b82f6', boxShadow: '0 0 8px #3b82f6' }}></span>
-            Official Verification
+        <div className="cv-ledger-wrap">
+          <div className="cv-tabs" role="tablist" aria-label="Search method">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={searchMode === 'id'}
+              className={`cv-tab ${searchMode === 'id' ? 'is-on' : ''}`}
+              onClick={() => { setSearchMode('id'); setErrorMsg(''); }}
+            >
+              Certificate ID
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={searchMode === 'name_email'}
+              className={`cv-tab ${searchMode === 'name_email' ? 'is-on' : ''}`}
+              onClick={() => { setSearchMode('name_email'); setErrorMsg(''); }}
+            >
+              Name &amp; Email
+            </button>
           </div>
 
-          <h1 style={{
-            fontSize: 'clamp(32px, 5vw, 48px)',
-            fontWeight: '900',
-            letterSpacing: '-1px',
-            lineHeight: '1.2',
-            color: '#ffffff',
-            textAlign: 'center',
-            margin: '0 auto 16px',
-            width: '100%'
-          }}>
-            Verify Your Certificate
-          </h1>
-
-          <p style={{
-            fontSize: '17px',
-            color: '#94a3b8',
-            maxWidth: '600px',
-            margin: '0 auto 40px',
-            lineHeight: '1.6',
-            textAlign: 'center'
-          }}>
-            Quickly check and download official certificates issued by YANF and partner institutions.
-          </p>
-
-          {/* SEARCH CONSOLE CARD */}
-          <div style={{
-            background: 'rgba(15, 23, 42, 0.75)',
-            backdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255, 255, 255, 0.12)',
-            borderRadius: '24px',
-            padding: '32px',
-            boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset',
-            textAlign: 'left'
-          }}>
-            {/* Tabs */}
-            <div style={{
-              display: 'flex',
-              gap: '6px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              padding: '5px',
-              borderRadius: '12px',
-              width: 'fit-content',
-              marginBottom: '24px',
-              border: '1px solid rgba(255, 255, 255, 0.05)'
-            }}>
-              <button
-                type="button"
-                onClick={() => { setSearchMode('id'); setErrorMsg(''); }}
-                style={{
-                  background: searchMode === 'id' ? '#2563eb' : 'transparent',
-                  color: searchMode === 'id' ? '#ffffff' : '#94a3b8',
-                  border: 'none',
-                  padding: '9px 20px',
-                  borderRadius: '8px',
-                  fontSize: '13px',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  transition: 'all 0.2s ease'
-                }}
-              >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                Certificate ID
-              </button>
-              <button
-                type="button"
-                onClick={() => { setSearchMode('name_email'); setErrorMsg(''); }}
-                style={{
-                  background: searchMode === 'name_email' ? '#2563eb' : 'transparent',
-                  color: searchMode === 'name_email' ? '#ffffff' : '#94a3b8',
-                  border: 'none',
-                  padding: '9px 20px',
-                  borderRadius: '8px',
-                  fontSize: '13px',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  transition: 'all 0.2s ease'
-                }}
-              >
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                Name & Email
-              </button>
-            </div>
-
-            {/* Tab 1: By ID */}
+          <div className="cv-ledger" role="tabpanel">
             {searchMode === 'id' && (
-              <div style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-                <div style={{ flex: '1 1 340px', position: 'relative' }}>
-                  <div style={{ position: 'absolute', top: '50%', left: '18px', transform: 'translateY(-50%)', color: '#64748b' }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="3" y="4" width="18" height="16" rx="2"></rect>
-                      <line x1="7" y1="8" x2="17" y2="8"></line>
-                      <line x1="7" y1="12" x2="17" y2="12"></line>
-                      <line x1="7" y1="16" x2="12" y2="16"></line>
-                    </svg>
-                  </div>
+              <form
+                className="cv-form"
+                onSubmit={(e) => { e.preventDefault(); verifyById(); }}
+              >
+                <label className="cv-field">
+                  <span className="cv-type">Certificate ID</span>
                   <input
                     type="text"
                     placeholder="e.g. YANF-26-8K7Q"
                     value={certIdInput}
                     onChange={(e) => setCertIdInput(e.target.value.toUpperCase())}
-                    onKeyDown={(e) => e.key === 'Enter' && verifyById()}
-                    style={{
-                      width: '100%',
-                      background: 'rgba(255, 255, 255, 0.04)',
-                      border: '1px solid rgba(255, 255, 255, 0.15)',
-                      color: '#ffffff',
-                      fontFamily: 'monospace',
-                      fontSize: '16px',
-                      fontWeight: '700',
-                      letterSpacing: '1px',
-                      padding: '16px 18px 16px 48px',
-                      borderRadius: '12px',
-                      outline: 'none',
-                      boxSizing: 'border-box',
-                      transition: 'border-color 0.2s'
-                    }}
-                    onFocus={(e) => { e.target.style.borderColor = '#3b82f6'; e.target.style.background = 'rgba(255, 255, 255, 0.08)'; }}
-                    onBlur={(e) => { e.target.style.borderColor = 'rgba(255, 255, 255, 0.15)'; e.target.style.background = 'rgba(255, 255, 255, 0.04)'; }}
+                    autoComplete="off"
+                    spellCheck="false"
                   />
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => verifyById()}
-                  disabled={loading || !certIdInput.trim()}
-                  style={{
-                    background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-                    color: '#ffffff',
-                    border: 'none',
-                    padding: '0 32px',
-                    borderRadius: '12px',
-                    fontSize: '15px',
-                    fontWeight: '700',
-                    cursor: loading || !certIdInput.trim() ? 'not-allowed' : 'pointer',
-                    opacity: loading || !certIdInput.trim() ? 0.6 : 1,
-                    boxShadow: '0 8px 20px -4px rgba(37, 99, 235, 0.4)',
-                    transition: 'all 0.2s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    height: '54px'
-                  }}
-                  onMouseEnter={(e) => { if (!loading && certIdInput.trim()) e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
-                >
-                  {loading ? 'Checking...' : 'Verify Certificate'}
-                  {!loading && (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M5 12h14"></path>
-                      <path d="M12 5l7 7-7 7"></path>
-                    </svg>
-                  )}
+                </label>
+                <p className="cv-hint">Printed at the bottom of your certificate, next to the QR code.</p>
+                <button type="submit" className="cv-stamp" disabled={loading || !certIdInput.trim()}>
+                  {loading ? 'Checking…' : 'Verify Certificate →'}
                 </button>
-              </div>
+              </form>
             )}
 
-            {/* Tab 2: By Name + Email */}
             {searchMode === 'name_email' && (
-              <form onSubmit={handleSearchByNameEmail} style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-                <div style={{ flex: '1 1 220px' }}>
+              <form className="cv-form" onSubmit={handleSearchByNameEmail}>
+                <label className="cv-field">
+                  <span className="cv-type">Full name</span>
                   <input
                     type="text"
                     required
-                    placeholder="Full Name (e.g. Ananya Sharma)"
+                    placeholder="e.g. Ananya Sharma"
                     value={nameInput}
+                    autoComplete="name"
                     onChange={(e) => setNameInput(e.target.value)}
-                    style={{
-                      width: '100%',
-                      background: 'rgba(255, 255, 255, 0.04)',
-                      border: '1px solid rgba(255, 255, 255, 0.15)',
-                      color: '#ffffff',
-                      fontSize: '14px',
-                      padding: '16px 18px',
-                      borderRadius: '12px',
-                      outline: 'none',
-                      boxSizing: 'border-box'
-                    }}
                   />
-                </div>
-                <div style={{ flex: '1 1 240px' }}>
+                </label>
+                <label className="cv-field">
+                  <span className="cv-type">Registered email</span>
                   <input
                     type="email"
                     required
                     placeholder="Registered Email Address"
                     value={emailInput}
+                    autoComplete="email"
                     onChange={(e) => setEmailInput(e.target.value)}
-                    style={{
-                      width: '100%',
-                      background: 'rgba(255, 255, 255, 0.04)',
-                      border: '1px solid rgba(255, 255, 255, 0.15)',
-                      color: '#ffffff',
-                      fontSize: '14px',
-                      padding: '16px 18px',
-                      borderRadius: '12px',
-                      outline: 'none',
-                      boxSizing: 'border-box'
-                    }}
                   />
-                </div>
-                <button
-                  type="submit"
-                  disabled={loading}
-                  style={{
-                    background: '#2563eb',
-                    color: '#ffffff',
-                    border: 'none',
-                    padding: '0 28px',
-                    borderRadius: '12px',
-                    fontSize: '14px',
-                    fontWeight: '700',
-                    cursor: 'pointer',
-                    boxShadow: '0 8px 20px -4px rgba(37, 99, 235, 0.4)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    height: '54px'
-                  }}
-                >
-                  {loading ? 'Searching...' : 'Find Certificate'}
+                </label>
+                <button type="submit" className="cv-stamp" disabled={loading}>
+                  {loading ? 'Searching…' : 'Find Certificate →'}
                 </button>
               </form>
             )}
 
-            {/* Error Notification */}
             {errorMsg && (
-              <div style={{
-                marginTop: '20px',
-                background: 'rgba(239, 68, 68, 0.12)',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
-                color: '#fca5a5',
-                padding: '14px 18px',
-                borderRadius: '12px',
-                fontSize: '14px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px'
-              }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="12" y1="8" x2="12" y2="12"></line>
-                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
-                {errorMsg}
-              </div>
+              <p className="cv-error" role="alert">
+                <span aria-hidden="true">✕</span> {errorMsg}
+              </p>
             )}
           </div>
-
-          {/* TRUST BADGES ROW */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '16px',
-            marginTop: '32px',
-            textAlign: 'left'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.06)', padding: '14px 18px', borderRadius: '14px' }}>
-              <span style={{ fontSize: '20px' }}>🛡️</span>
-              <div>
-                <div style={{ fontSize: '13px', fontWeight: '700', color: '#ffffff' }}>100% Authentic</div>
-                <div style={{ fontSize: '11px', color: '#94a3b8' }}>Directly matched with official YANF records</div>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.06)', padding: '14px 18px', borderRadius: '14px' }}>
-              <span style={{ fontSize: '20px' }}>🏛️</span>
-              <div>
-                <div style={{ fontSize: '13px', fontWeight: '700', color: '#ffffff' }}>Officially Signed</div>
-                <div style={{ fontSize: '11px', color: '#94a3b8' }}>Issued together with partner schools</div>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'rgba(255, 255, 255, 0.03)', border: '1px solid rgba(255, 255, 255, 0.06)', padding: '14px 18px', borderRadius: '14px' }}>
-              <span style={{ fontSize: '20px' }}>🔒</span>
-              <div>
-                <div style={{ fontSize: '13px', fontWeight: '700', color: '#ffffff' }}>Secure PDF Download</div>
-                <div style={{ fontSize: '11px', color: '#94a3b8' }}>High-quality, print-ready certificate copy</div>
-              </div>
-            </div>
-          </div>
-
         </div>
       </section>
 
       {/* MULTIPLE RESULTS PICKER */}
       {searchResults.length > 0 && (
-        <section style={{ maxWidth: '960px', margin: '40px auto', padding: '0 24px' }}>
-          <div style={{
-            background: 'rgba(15, 23, 42, 0.8)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '20px',
-            padding: '32px'
-          }}>
-            <h3 style={{ margin: '0 0 20px', fontSize: '18px', color: '#ffffff', fontWeight: '800' }}>
-              Found {searchResults.length} Certificates Matching Your Record:
-            </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px' }}>
-              {searchResults.map((item) => (
-                <div
-                  key={item._id}
-                  onClick={() => verifyById(item.certificateNumber)}
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.03)',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    borderRadius: '14px',
-                    padding: '20px',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#3b82f6';
-                    e.currentTarget.style.background = 'rgba(59, 130, 246, 0.08)';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.03)';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                >
-                  <div style={{ fontFamily: 'monospace', color: '#60a5fa', fontWeight: '700', fontSize: '15px' }}>{item.certificateNumber}</div>
-                  <div style={{ fontSize: '15px', fontWeight: '700', color: '#ffffff', marginTop: '6px' }}>{item.position}</div>
-                  <div style={{ fontSize: '13px', color: '#94a3b8', marginTop: '4px' }}>{item.portfolio} • {item.committee}</div>
-                  <div style={{ fontSize: '12px', color: '#64748b', marginTop: '10px' }}>{item.eventTitle}</div>
-                </div>
-              ))}
-            </div>
+        <section className="cv-wrap cv-section">
+          <p className="cv-label">Found {searchResults.length} Certificates Matching Your Record</p>
+          <div className="cv-results">
+            {searchResults.map((item, i) => (
+              <button
+                key={item._id}
+                type="button"
+                className="cv-result"
+                style={{ '--tilt': `${[-0.8, 0.6, -0.4, 0.9][i % 4]}deg` }}
+                onClick={() => verifyById(item.certificateNumber)}
+              >
+                <span className="cv-type cv-result-no">{item.certificateNumber}</span>
+                <span className="cv-result-pos">{item.position}</span>
+                <span className="cv-result-meta">{item.portfolio} • {item.committee}</span>
+                <span className="cv-type cv-result-event">{item.eventTitle}</span>
+                <span className="cv-type cv-result-go">Open certificate →</span>
+              </button>
+            ))}
           </div>
         </section>
       )}
 
-      {/* HOW IT WORKS & INSTITUTIONAL GUIDE (ALWAYS VISIBLE ON PAGE) */}
-      <section style={{ maxWidth: '1040px', margin: '0 auto', padding: '60px 24px 100px' }}>
-        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
-          <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#ffffff', letterSpacing: '-0.5px', margin: '0 0 12px' }}>
-            How Verification Works
-          </h2>
-          <p style={{ fontSize: '15px', color: '#94a3b8', margin: 0 }}>
-            Three simple steps to check or download your certificate.
-          </p>
+      {/* HOW IT WORKS */}
+      <section className="cv-wrap cv-section">
+        <div className="cv-section-head">
+          <p className="cv-label">How Verification Works</p>
+          <p className="cv-section-sub">Three simple steps to check or download your certificate.</p>
         </div>
+        <ol className="cv-steps">
+          <li className="cv-step" style={{ '--tilt': '-0.8deg' }}>
+            <span className="cv-type cv-step-no">01</span>
+            <h3>Enter Certificate ID</h3>
+            <p>Find your unique certificate ID printed at the bottom of the certificate, or scan the QR code with your phone camera.</p>
+          </li>
+          <li className="cv-step" style={{ '--tilt': '0.6deg' }}>
+            <span className="cv-type cv-step-no">02</span>
+            <h3>Instant Database Check</h3>
+            <p>We instantly check our records to confirm the student name, award, event, and authorized signatures.</p>
+          </li>
+          <li className="cv-step" style={{ '--tilt': '-0.4deg' }}>
+            <span className="cv-type cv-step-no">03</span>
+            <h3>View &amp; Download PDF</h3>
+            <p>View your certificate on screen and download a high-resolution, print-ready PDF using a one-time email code.</p>
+          </li>
+        </ol>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))',
-          gap: '24px',
-          marginBottom: '60px'
-        }}>
-          {/* Step 1 */}
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.02)',
-            border: '1px solid rgba(255, 255, 255, 0.06)',
-            borderRadius: '20px',
-            padding: '32px 28px',
-            position: 'relative'
-          }}>
-            <div style={{ fontSize: '28px', fontWeight: '900', color: '#3b82f6', marginBottom: '16px', fontFamily: 'monospace' }}>
-              01
-            </div>
-            <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#ffffff', margin: '0 0 10px' }}>
-              Enter Certificate ID
-            </h3>
-            <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: '1.6', margin: 0 }}>
-              Find your unique certificate ID printed at the bottom of the certificate, or scan the QR code with your phone camera.
-            </p>
+        {/* FOR INSTITUTIONS */}
+        <div className="cv-folder">
+          <span className="cv-folder-tab cv-type">For Schools, Colleges &amp; Recruiters</span>
+          <div className="cv-folder-copy">
+            <h3>Verify for Admissions or Job Applications</h3>
+            <p>Universities and employers can independently check any student's YANF certificate directly on this page at any time without needing to email the team.</p>
           </div>
-
-          {/* Step 2 */}
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.02)',
-            border: '1px solid rgba(255, 255, 255, 0.06)',
-            borderRadius: '20px',
-            padding: '32px 28px',
-            position: 'relative'
-          }}>
-            <div style={{ fontSize: '28px', fontWeight: '900', color: '#10b981', marginBottom: '16px', fontFamily: 'monospace' }}>
-              02
-            </div>
-            <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#ffffff', margin: '0 0 10px' }}>
-              Instant Database Check
-            </h3>
-            <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: '1.6', margin: 0 }}>
-              We instantly check our records to confirm the student name, award, event, and authorized signatures.
-            </p>
-          </div>
-
-          {/* Step 3 */}
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.02)',
-            border: '1px solid rgba(255, 255, 255, 0.06)',
-            borderRadius: '20px',
-            padding: '32px 28px',
-            position: 'relative'
-          }}>
-            <div style={{ fontSize: '28px', fontWeight: '900', color: '#f59e0b', marginBottom: '16px', fontFamily: 'monospace' }}>
-              03
-            </div>
-            <h3 style={{ fontSize: '18px', fontWeight: '700', color: '#ffffff', margin: '0 0 10px' }}>
-              View & Download PDF
-            </h3>
-            <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: '1.6', margin: 0 }}>
-              View your certificate on screen and download a high-resolution, print-ready PDF using a one-time email code.
-            </p>
-          </div>
-        </div>
-
-        {/* ADVISORY CARD FOR INSTITUTIONS */}
-        <div style={{
-          background: 'linear-gradient(135deg, rgba(30, 58, 95, 0.3) 0%, rgba(15, 23, 42, 0.4) 100%)',
-          border: '1px solid rgba(59, 130, 246, 0.25)',
-          borderRadius: '20px',
-          padding: '36px',
-          display: 'flex',
-          flexWrap: 'wrap',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '24px'
-        }}>
-          <div style={{ maxWidth: '640px' }}>
-            <div style={{ fontSize: '12px', fontWeight: '700', color: '#60a5fa', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
-              For Schools, Colleges & Recruiters
-            </div>
-            <h3 style={{ fontSize: '18px', fontWeight: '800', color: '#ffffff', margin: '0 0 10px' }}>
-              Verify for Admissions or Job Applications
-            </h3>
-            <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: '1.6', margin: 0 }}>
-              Universities and employers can independently check any student's YANF certificate directly on this page at any time without needing to email the team.
-            </p>
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ fontSize: '12px', color: '#64748b' }}>Need assistance with a certificate?</div>
-            <a
-              href="mailto:secretariat@yanf.org"
-              style={{
-                color: '#60a5fa',
-                textDecoration: 'none',
-                fontSize: '14px',
-                fontWeight: '600',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px'
-              }}
-            >
-              Contact Team &rarr;
-            </a>
+          <div className="cv-folder-cta">
+            <span className="cv-type cv-small">Need assistance with a certificate?</span>
+            <a className="cv-btn-dark" href="mailto:secretariat@yanf.org">Contact Team →</a>
           </div>
         </div>
       </section>
 
-      {/* VERIFIED CERTIFICATE MODAL / OVERLAY LIGHTBOX */}
+      {/* VERIFIED CERTIFICATE VIEWER */}
       {verifiedRecord && (
-        <div
-          onClick={() => setVerifiedRecord(null)}
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(3, 7, 18, 0.85)',
-            backdropFilter: 'blur(12px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 99990,
-            padding: '24px 16px'
-          }}
-        >
-          {/* FLOATING INSPECTION FRAME */}
+        <div className="cv-overlay" onClick={() => setVerifiedRecord(null)}>
           <div
+            className="cv-viewer"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`Certificate ${cert?.certificateNumber || ''}`}
             onClick={(e) => e.stopPropagation()}
-            style={{
-              width: '100%',
-              maxWidth: '960px',
-              height: '92vh',
-              maxHeight: '92vh',
-              background: '#0d1522',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              borderRadius: '24px',
-              boxShadow: '0 30px 100px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05) inset',
-              display: 'flex',
-              flexDirection: 'column',
-              overflow: 'hidden',
-              position: 'relative'
-            }}
           >
-            {/* FRAME HEADER BAR */}
-            <div style={{
-              padding: '16px 28px',
-              background: 'rgba(15, 23, 42, 0.95)',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '16px',
-              flexShrink: 0
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '50%',
-                  background: 'rgba(16, 185, 129, 0.15)',
-                  border: '1px solid rgba(16, 185, 129, 0.4)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#34d399',
-                  flexShrink: 0
-                }}>
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                  </svg>
-                </div>
+            <div className="cv-viewer-head">
+              <div className="cv-viewer-id">
+                <span className="cv-verified">Verified Authentic</span>
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontSize: '11px', fontWeight: '800', letterSpacing: '1px', textTransform: 'uppercase', color: '#34d399', background: 'rgba(16, 185, 129, 0.15)', padding: '2px 8px', borderRadius: '4px' }}>
-                      Verified Authentic
-                    </span>
-                    <span style={{ fontFamily: 'monospace', fontSize: '12px', color: '#94a3b8', fontWeight: '700' }}>
-                      {cert?.certificateNumber}
-                    </span>
-                  </div>
-                  <div style={{ fontSize: '17px', fontWeight: '800', color: '#ffffff', marginTop: '2px' }}>
-                    {cert?.recipientName || 'Official YANF Certificate'}
-                  </div>
+                  <div className="cv-type cv-viewer-no">{cert?.certificateNumber}</div>
+                  <div className="cv-viewer-name">{cert?.recipientName || 'Official YANF Certificate'}</div>
                 </div>
               </div>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <div className="cv-viewer-actions">
                 <button
                   type="button"
+                  className="cv-stamp cv-stamp-sm"
                   onClick={handleRequestOtp}
                   disabled={otpLoading || downloadingPdf}
-                  style={{
-                    background: '#10b981',
-                    color: '#ffffff',
-                    border: 'none',
-                    padding: '10px 20px',
-                    borderRadius: '10px',
-                    fontSize: '13px',
-                    fontWeight: '700',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    boxShadow: '0 8px 16px -4px rgba(16, 185, 129, 0.4)',
-                    transition: 'all 0.2s ease',
-                    opacity: otpLoading || downloadingPdf ? 0.7 : 1
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                    <polyline points="7 10 12 15 17 10"></polyline>
-                    <line x1="12" y1="15" x2="12" y2="3"></line>
-                  </svg>
-                  {downloadingPdf ? 'Exporting PDF...' : (otpLoading ? 'Sending Passcode...' : 'Download Official PDF')}
+                  {downloadingPdf ? 'Exporting PDF…' : (otpLoading ? 'Sending Passcode…' : 'Download Official PDF')}
                 </button>
-
-                <button
-                  type="button"
-                  onClick={() => setVerifiedRecord(null)}
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.08)',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    color: '#e2e8f0',
-                    width: '36px',
-                    height: '36px',
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.18)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'; }}
-                  title="Close (Esc)"
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="18" y1="6" x2="6" y2="18"></line>
-                    <line x1="6" y1="6" x2="18" y2="18"></line>
-                  </svg>
-                </button>
+                <button type="button" className="cv-close" onClick={() => setVerifiedRecord(null)} aria-label="Close (Esc)" title="Close (Esc)">✕</button>
               </div>
             </div>
 
-            {/* FRAME SCROLLABLE BODY WITH RESPONSIVE SIZING */}
-            <div
-              ref={viewerBodyRef}
-              style={{
-                flex: 1,
-                overflowY: 'auto',
-                overflowX: 'auto',
-                padding: '24px 16px 80px',
-                background: '#070d17',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                position: 'relative'
-              }}
-            >
-              {/* PRE-EVENT NOTICE IF APPLICABLE */}
+            <div ref={viewerBodyRef} className="cv-viewer-body">
               {cert?.isPreEventBlank && (
-                <div style={{
-                  background: '#fffbeb',
-                  border: '1px solid #fde68a',
-                  borderRadius: '14px',
-                  padding: '16px 24px',
-                  textAlign: 'center',
-                  marginBottom: '20px',
-                  color: '#92400e',
-                  maxWidth: '794px',
-                  width: '100%'
-                }}>
-                  <h3 style={{ fontSize: '15px', fontWeight: '800', margin: '0 0 4px' }}>
-                    Pre-Allocated Blank Certificate Notice
-                  </h3>
-                  <p style={{ fontSize: '13px', margin: 0, lineHeight: '1.5' }}>
+                <div className="cv-notice">
+                  <h3>Pre-Allocated Blank Certificate Notice</h3>
+                  <p>
                     This is an authentic pre-allocated YANF certificate assigned to <strong>{event?.title}</strong>. Full digital delegate allocation and PDF download will become active once post-event committee winners are synchronized.
                   </p>
                 </div>
               )}
-
               {/* SIZED WRAPPER TO CONTROL LAYOUT BOUNDARIES ACCORDING TO ZOOM SCALE */}
               <div
                 style={{
@@ -1386,279 +855,63 @@ export default function PublicCertificateVerification({ onClose }) {
               </div>
             </div>
 
-              {/* FLOATING RESPONSIVE ZOOM CONTROLS TOOLBAR */}
-              <div
-                style={{
-                  position: 'sticky',
-                  bottom: '16px',
-                  zIndex: 40,
-                  marginTop: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  background: 'rgba(15, 23, 42, 0.92)',
-                  backdropFilter: 'blur(16px)',
-                  border: '1px solid rgba(255, 255, 255, 0.18)',
-                  padding: '6px 14px',
-                  borderRadius: '9999px',
-                  boxShadow: '0 10px 30px rgba(0, 0, 0, 0.6)',
-                  width: 'fit-content'
-                }}
-              >
-                <button
-                  type="button"
-                  onClick={handleZoomOut}
-                  title="Zoom Out"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.08)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    color: '#ffffff',
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    transition: 'all 0.15s ease'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'; }}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                  </svg>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleFit}
-                  title="Fit certificate to screen"
-                  style={{
-                    background: isAutoFit ? '#2563eb' : 'rgba(255, 255, 255, 0.08)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    color: '#ffffff',
-                    padding: '6px 14px',
-                    borderRadius: '9999px',
-                    cursor: 'pointer',
-                    fontSize: '12px',
-                    fontWeight: '700',
-                    transition: 'all 0.15s ease',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px'
-                  }}
-                  onMouseEnter={(e) => { if (!isAutoFit) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'; }}
-                  onMouseLeave={(e) => { if (!isAutoFit) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'; }}
-                >
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
-                  </svg>
-                  Fit to Screen
-                </button>
-
-                <span style={{ fontSize: '12px', color: '#94a3b8', minWidth: '44px', textAlign: 'center', fontFamily: 'monospace', fontWeight: '700' }}>
-                  {Math.round(zoomScale * 100)}%
-                </span>
-
-                <button
-                  type="button"
-                  onClick={handleZoomIn}
-                  title="Zoom In"
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.08)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    color: '#ffffff',
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '50%',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    transition: 'all 0.15s ease'
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'; }}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                  </svg>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleActualSize}
-                  title="Actual Size (100%)"
-                  style={{
-                    background: zoomScale === 1.0 && !isAutoFit ? '#2563eb' : 'rgba(255, 255, 255, 0.08)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    color: '#ffffff',
-                    padding: '6px 12px',
-                    borderRadius: '9999px',
-                    cursor: 'pointer',
-                    fontSize: '12px',
-                    fontWeight: '700',
-                    transition: 'all 0.15s ease'
-                  }}
-                  onMouseEnter={(e) => { if (zoomScale !== 1.0 || isAutoFit) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)'; }}
-                  onMouseLeave={(e) => { if (zoomScale !== 1.0 || isAutoFit) e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'; }}
-                >
-                  100%
-                </button>
+              {/* ZOOM CONTROLS */}
+              <div className="cv-zoom" role="toolbar" aria-label="Zoom">
+                <button type="button" onClick={handleZoomOut} aria-label="Zoom out" title="Zoom Out">−</button>
+                <button type="button" onClick={handleFit} className={isAutoFit ? 'is-on' : ''} title="Fit certificate to screen">Fit to Screen</button>
+                <span className="cv-zoom-val">{Math.round(zoomScale * 100)}%</span>
+                <button type="button" onClick={handleZoomIn} aria-label="Zoom in" title="Zoom In">+</button>
+                <button type="button" onClick={handleActualSize} className={zoomScale === 1.0 && !isAutoFit ? 'is-on' : ''} title="Actual Size (100%)">100%</button>
               </div>
-
             </div>
           </div>
         </div>
       )}
 
-      {/* 2FA EMAIL OTP VERIFICATION MODAL */}
+      {/* EMAIL PASSCODE MODAL */}
       {isOtpModalOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(4, 9, 14, 0.88)',
-          backdropFilter: 'blur(10px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 99999,
-          padding: '20px'
-        }}>
-          <div style={{
-            background: '#0d1726',
-            border: '1px solid rgba(59, 130, 246, 0.3)',
-            borderRadius: '20px',
-            padding: '36px',
-            width: '100%',
-            maxWidth: '440px',
-            boxShadow: '0 25px 60px rgba(0, 0, 0, 0.8)',
-            textAlign: 'center'
-          }}>
-            <div style={{
-              width: '56px',
-              height: '56px',
-              borderRadius: '50%',
-              background: 'rgba(59, 130, 246, 0.15)',
-              color: '#60a5fa',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 20px'
-            }}>
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-              </svg>
-            </div>
-
-            <h3 style={{ margin: '0 0 8px', fontSize: '20px', color: '#ffffff', fontWeight: '800' }}>
-              Security Passcode Required
-            </h3>
-            <p style={{ margin: '0 0 24px', fontSize: '14px', color: '#94a3b8', lineHeight: '1.5' }}>
+        <div className="cv-overlay cv-overlay-top">
+          <div className="cv-otp" role="dialog" aria-modal="true" aria-labelledby="cv-otp-title">
+            <span className="cv-otp-seal" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></svg>
+            </span>
+            <h3 id="cv-otp-title">Security Passcode Required</h3>
+            <p className="cv-otp-text">
               To protect recipient identity, we dispatched a 6-digit one-time passcode to the registered delegate email address.
             </p>
-
-            {otpSuccessMsg && (
-              <div style={{ background: 'rgba(16, 185, 129, 0.15)', border: '1px solid rgba(16, 185, 129, 0.3)', color: '#34d399', padding: '10px', borderRadius: '8px', fontSize: '13px', marginBottom: '18px' }}>
-                {otpSuccessMsg}
-              </div>
-            )}
-
-            {otpError && (
-              <div style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)', color: '#fca5a5', padding: '10px', borderRadius: '8px', fontSize: '13px', marginBottom: '18px' }}>
-                {otpError}
-              </div>
-            )}
-
+            {otpSuccessMsg && <p className="cv-otp-ok" role="status">{otpSuccessMsg}</p>}
+            {otpError && <p className="cv-error" role="alert"><span aria-hidden="true">✕</span> {otpError}</p>}
             <form onSubmit={handleVerifyOtpAndDownload}>
+              <label className="cv-sr" htmlFor="cv-otp-input">6-digit passcode</label>
               <input
+                id="cv-otp-input"
+                className="cv-otp-input"
                 type="text"
+                inputMode="numeric"
+                autoComplete="one-time-code"
                 maxLength="6"
-                placeholder="&bull; &bull; &bull; &bull; &bull; &bull;"
+                placeholder="• • • • • •"
                 value={otpInput}
                 onChange={(e) => setOtpInput(e.target.value.replace(/\D/g, ''))}
                 autoFocus
-                style={{
-                  width: '100%',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  borderRadius: '12px',
-                  color: '#ffffff',
-                  fontSize: '24px',
-                  letterSpacing: '12px',
-                  textAlign: 'center',
-                  padding: '14px',
-                  marginBottom: '24px',
-                  boxSizing: 'border-box',
-                  outline: 'none',
-                  fontFamily: 'monospace'
-                }}
               />
-
-              <div style={{ display: 'flex', gap: '12px' }}>
-                <button
-                  type="button"
-                  onClick={() => setIsOtpModalOpen(false)}
-                  style={{
-                    flex: 1,
-                    background: 'rgba(255, 255, 255, 0.06)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    color: '#e2e8f0',
-                    padding: '12px',
-                    borderRadius: '10px',
-                    cursor: 'pointer',
-                    fontSize: '14px',
-                    fontWeight: '600'
-                  }}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={otpLoading || otpInput.length < 6}
-                  style={{
-                    flex: 1,
-                    background: '#2563eb',
-                    color: '#ffffff',
-                    border: 'none',
-                    padding: '12px',
-                    borderRadius: '10px',
-                    fontWeight: '700',
-                    cursor: otpLoading || otpInput.length < 6 ? 'not-allowed' : 'pointer',
-                    opacity: otpLoading || otpInput.length < 6 ? 0.6 : 1,
-                    fontSize: '14px',
-                    boxShadow: '0 8px 16px -4px rgba(37, 99, 235, 0.5)'
-                  }}
-                >
-                  {otpLoading ? 'Verifying...' : 'Verify & Export'}
+              <div className="cv-otp-actions">
+                <button type="button" className="cv-btn-ghost" onClick={() => setIsOtpModalOpen(false)}>Cancel</button>
+                <button type="submit" className="cv-stamp" disabled={otpLoading || otpInput.length < 6}>
+                  {otpLoading ? 'Verifying…' : 'Verify & Export'}
                 </button>
               </div>
             </form>
-
-            <div style={{ marginTop: '20px', fontSize: '13px', color: '#64748b' }}>
+            <div className="cv-otp-resend">
               {cooldown > 0 ? (
                 <span>Resend passcode in {cooldown}s</span>
               ) : (
-                <button
-                  type="button"
-                  onClick={handleRequestOtp}
-                  style={{ background: 'none', border: 'none', color: '#60a5fa', cursor: 'pointer', textDecoration: 'underline', fontSize: '13px' }}
-                >
-                  Resend Passcode
-                </button>
+                <button type="button" onClick={handleRequestOtp}>Resend Passcode</button>
               )}
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 }
