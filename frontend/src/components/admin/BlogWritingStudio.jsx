@@ -738,7 +738,7 @@ export default function BlogWritingStudio({
                 </div>
 
                 <div className="serp-title-link">
-                  {title ? `${title} — YANF` : 'Untitled Policy Brief — YANF Global'}
+                  {title ? `${title} | YANF` : 'Untitled Policy Brief | YANF Global'}
                 </div>
 
                 <p className="serp-snippet-desc">

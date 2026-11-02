@@ -164,3 +164,50 @@ export async function deleteAdminUser(id) {
   if (!res.ok) throw new Error(data.error || 'Failed to delete user account.');
   return data;
 }
+
+// ---------- Gallery ----------
+export async function fetchGalleryPhotos() {
+  const res = await fetch(`${API_BASE_URL}/gallery`);
+  const data = await res.json().catch(() => []);
+  if (!res.ok) throw new Error(data.error || 'Failed to load the gallery.');
+  return data;
+}
+
+export async function fetchAllGalleryPhotos() {
+  const res = await fetch(`${API_BASE_URL}/gallery/all`, { headers: { ...getAuthHeaders() } });
+  const data = await res.json().catch(() => []);
+  if (!res.ok) throw new Error(data.error || 'Failed to load gallery photos.');
+  return data;
+}
+
+export async function createGalleryPhoto(photo) {
+  const res = await fetch(`${API_BASE_URL}/gallery`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+    body: JSON.stringify(photo)
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Failed to add the photo to the gallery.');
+  return data;
+}
+
+export async function updateGalleryPhoto(id, updates) {
+  const res = await fetch(`${API_BASE_URL}/gallery/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+    body: JSON.stringify(updates)
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Failed to update the photo.');
+  return data;
+}
+
+export async function deleteGalleryPhoto(id) {
+  const res = await fetch(`${API_BASE_URL}/gallery/${id}`, {
+    method: 'DELETE',
+    headers: { ...getAuthHeaders() }
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || 'Failed to remove the photo.');
+  return data;
+}

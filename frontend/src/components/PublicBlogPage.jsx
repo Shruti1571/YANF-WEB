@@ -642,7 +642,7 @@ export default function PublicBlogPage({ onNavigate }) {
           </div>
 
           <footer className="editorial-footer-tagline">
-            YANF — Youth as Nations' Front &nbsp;|&nbsp; Where Potential Meets Purpose.
+            YANF · Youth as Nations' Front &nbsp;|&nbsp; Where Potential Meets Purpose.
           </footer>
 
         </div>
@@ -849,7 +849,7 @@ export default function PublicBlogPage({ onNavigate }) {
         )}
 
         <div className="tagline-foot" style={{ textAlign: 'center', marginTop: '64px' }}>
-          YANF — Youth as Nations' Front &nbsp;|&nbsp; Where Potential Meets Purpose.
+          YANF · Youth as Nations' Front &nbsp;|&nbsp; Where Potential Meets Purpose.
         </div>
       </div>
     </div>

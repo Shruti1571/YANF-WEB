@@ -42,7 +42,7 @@ export default function ArticlePreviewInspector({
         </div>
         <div style={{ background: '#ffffff', color: '#1a0dab', padding: '16px', borderRadius: '4px', fontFamily: 'Arial, sans-serif' }}>
           <div style={{ fontSize: '18px', lineHeight: '1.2', color: '#1a0dab', textDecoration: 'underline', marginBottom: '4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {metaTitle || title || 'Article Title — YANF'}
+            {metaTitle || title || 'Article Title | YANF'}
           </div>
           <div style={{ fontSize: '13px', color: '#006621', marginBottom: '4px' }}>
             {(import.meta.env.VITE_SITE_URL || (typeof window !== 'undefined' ? window.location.origin : 'https://yanfglobal.com'))}/#page-blogs/{slug || 'article-slug'}

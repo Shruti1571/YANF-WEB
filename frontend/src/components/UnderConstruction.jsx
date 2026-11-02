@@ -50,7 +50,7 @@ export default function UnderConstruction({ kicker, title, badge, description, f
           </div>
         </div>
 
-        <div className="tagline-foot">YANF — Youth as Nations' Front &nbsp;|&nbsp; Where Potential Meets Purpose.</div>
+        <div className="tagline-foot">YANF · Youth as Nations' Front &nbsp;|&nbsp; Where Potential Meets Purpose.</div>
       </div>
     </>
   );

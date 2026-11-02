@@ -1,85 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import Loader from './components/Loader';
-import Navbar from './components/Navbar';
-import MobileMenu from './components/MobileMenu';
-import VideoFilm from './components/VideoFilm';
+import React, { useState, useEffect, useCallback } from 'react';
+import Home from './components/assembly/Home';
+import { AssemblyNav } from './components/assembly/common';
 import PageOverlays from './components/PageOverlays';
 import './styles/main.css';
+import './styles/desk.css';
+import './styles/assembly.css';
+import './styles/ia.css';
+import './styles/gallery.css';
+
+const TITLES = {
+  'page-about': 'About', 'page-mun': 'Model United Nations', 'page-debates': 'Parliamentary Debates', 'page-youth-parliament': 'Youth Parliament',
+  'page-innovation': 'Innovation Assembly', 'page-resources': 'Resources', 'page-certificates': 'Certificates', 'page-blogs': 'Blogs',
+  'page-hall-of-fame': 'Hall of Fame', 'page-gallery': 'Gallery', 'page-contact': 'Contact', 'page-admin': 'Admin',
+};
 
 export default function App() {
-  const [isLoaderDone, setIsLoaderDone] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activePage, setActivePage] = useState(null);
 
+  // Hash & permalink routing (#page-*, #page-blogs/<slug>, /blog/<slug>)
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoaderDone(true);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Hash & Permalink router state synchronization
-  useEffect(() => {
-    // If user lands directly on /blog/:slug path, redirect to #page-blogs/:slug
     if (window.location.pathname.startsWith('/blog/')) {
       const directSlug = window.location.pathname.replace('/blog/', '').replace(/\/$/, '');
-      if (directSlug) {
-        window.location.hash = `#page-blogs/${directSlug}`;
-      }
+      if (directSlug) window.location.hash = `#page-blogs/${directSlug}`;
     }
-
     const handleHashChange = () => {
       const hash = window.location.hash;
       if (hash.startsWith('#page-')) {
-        const basePageId = hash.slice(1).split('/')[0].split('?')[0];
-        setActivePage(basePageId);
-        document.body.style.overflow = 'hidden';
+        setActivePage(hash.slice(1).split('/')[0].split('?')[0]);
       } else if (hash.startsWith('#blog/')) {
-        const slug = hash.replace('#blog/', '');
-        window.location.hash = `#page-blogs/${slug}`;
+        window.location.hash = `#page-blogs/${hash.replace('#blog/', '')}`;
       } else {
         setActivePage(null);
-        document.body.style.overflow = '';
       }
     };
-
     window.addEventListener('hashchange', handleHashChange);
-    handleHashChange(); // initial route check
-
+    handleHashChange();
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
-  const navigateTo = (path) => {
+  useEffect(() => {
+    document.body.style.overflow = activePage ? 'hidden' : '';
+    document.documentElement.classList.toggle('as-in-page', !!activePage);
+    document.title = activePage ? `${TITLES[activePage] || 'YANF'} | YANF` : "YANF | Youth As Nations' Front";
+  }, [activePage]);
+
+  const navigateTo = useCallback((path) => {
     if (path === 'top') {
-      window.location.hash = '';
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (window.location.hash) window.history.pushState(null, '', window.location.pathname);
+      setActivePage(null);
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
     } else {
       window.location.hash = path;
     }
-  };
+  }, []);
 
-  const closePage = () => {
-    window.location.hash = '';
-  };
+  const closePage = useCallback(() => navigateTo('top'), [navigateTo]);
+  const isAdmin = activePage === 'page-admin';
 
   return (
-    <div className="app-container">
-      <Loader isDone={isLoaderDone} />
-      <Navbar
-        onNavigate={navigateTo}
-        onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
-      />
-      <MobileMenu
-        isOpen={isMobileMenuOpen}
-        onClose={() => setIsMobileMenuOpen(false)}
-        onNavigate={navigateTo}
-      />
-      <VideoFilm onNavigate={navigateTo} />
-      <PageOverlays
-        activePage={activePage}
-        onClose={closePage}
-        onNavigate={navigateTo}
-      />
+    <div className="app-container as-app">
+      {!isAdmin && <AssemblyNav onNavigate={navigateTo} activePage={activePage} />}
+      <Home onNavigate={navigateTo} paused={!!activePage} />
+      <PageOverlays activePage={activePage} onClose={closePage} onNavigate={navigateTo} />
     </div>
   );
 }
